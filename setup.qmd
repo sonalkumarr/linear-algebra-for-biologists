@@ -1,0 +1,27 @@
+---
+title: "Course setup"
+format: html
+---
+
+This course contains a few hands-on activities to aid understanding for some concepts we will be talking about. These have been designed to be carried out in R. To follow along, please make sure you have the following ready before coming to class.
+
+::: {.callout-important}
+In case you are unable to download the specified packages, please reach out to the instructors before class.
+:::
+
+1. Ensure you have the latest compatible versions of RStudio and R installed for your computer. If you have not previously used R, you can install them using the Self-Service desktop application or reach out directly to JAX IT.
+
+2. Make sure you have the following packages installed. Simply copy the code chunk and run it in the RStudio console:
+
+```{r}
+#| eval: false
+
+install.packages(c(
+  "tidyverse",
+  "factoextra",
+  "Rtsne",
+  "uwot"
+))
+```
+
+3. We will be using the same dataset throughout the course. Please download it ahead of the class.

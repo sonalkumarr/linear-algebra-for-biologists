@@ -1,0 +1,39 @@
+---
+title: "Linear Algebra for Biologists"
+---
+
+### Course description
+
+This is an interactive pilot workshop aimed at strengthening foundational linear algebra concepts in the context of biological data analysis. The focus will largely be on gaining an intuitive understanding of how biological data is structured and transformed in modern analysis workflows, including clustering and dimensionality reduction methods like PCA, t-SNE, and UMAP. Participants will learn how to critically evaluate their data, choose appropriate analytical methods, and derive biologically meaningful interpretations. This course is aimed at researchers seeking a conceptual understanding of the framework typically implemented in analyzing biological data. 
+**Open to all skill levels.**
+
+### Prerequisites 
+_Intro to R I_ and _Intro to Biostatistics_ preferred but not required.  
+
+### Learning objectives
+By the end of this workshop, participants will be able to:
+
+-	Represent biological data as vectors and matrices
+-	Interpret similarity and distance between samples
+-	Understand how transformations affect data structure
+-	Understand the need for dimensionality reduction
+-	Explain the biological significance of computing eigenvectors and eigenvalues
+-	Distinguish between popularly used dimensionality reduction techniques
+-	Identify appropriate methods/techniques for specific use cases
+-	Critically evaluate plots in practice
+
+### Course structure
+The course has been divided into 5 modules as follows:
+
+**Module 1: Understanding biological data structure** 
+
+**Module 2: Data transformations**
+
+**Module 3: Dimensionality reduction**
+
+**Module 4: Expanding beyond the PCA**
+
+**Module 5: Practical interpretations**
+
+**Optionally: Exploratory analysis**
+

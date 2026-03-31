@@ -1,0 +1,16 @@
+---
+title: "About the instructor"
+format: html
+---
+
+### Sonal Kumar
+
+I'm a PhD Candidate in the collaborative Neuroscience program offered through Tufts University and the Jackson Laboratory. My research in the Carter lab at JAX integrates multiomics data with clinical information to better understand Alzheimer's disease-associated neurodegeneration and functional decline with aging in a non-human primate model system. 
+Outside of my research, I'm passionate about making computational biology intuitive and accessible for students!
+
+### Contact and feedback
+
+If you have any questions or would like to chat about this course, please feel free to reach out at **sonal [dot] kumar [at] jax [dot] org** or raise an issue in the [course GitHub repository](https://github.com/sonalkumarr/linear-algebra-for-biologists).
+
+Your suggestions are always welcome! 
+If you are taking this course in May 2026, please consider filling out [this form](https://forms.cloud.microsoft/r/9gjQjYBfi3) to provide feedback that can be integrated for improving subsequent offerings for this workshop.

@@ -1,0 +1,107 @@
+[
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Linear Algebra for Biologists",
+    "section": "",
+    "text": "Course description\nThis is an interactive pilot workshop aimed at strengthening foundational linear algebra concepts in the context of biological data analysis. The focus will largely be on gaining an intuitive understanding of how biological data is structured and transformed in modern analysis workflows, including clustering and dimensionality reduction methods like PCA, t-SNE, and UMAP. Participants will learn how to critically evaluate their data, choose appropriate analytical methods, and derive biologically meaningful interpretations. This course is aimed at researchers seeking a conceptual understanding of the framework typically implemented in analyzing biological data. Open to all skill levels.\n\n\nPrerequisites\nIntro to R I and Intro to Biostatistics preferred but not required.\n\n\nLearning objectives\nBy the end of this workshop, participants will be able to:\n\nRepresent biological data as vectors and matrices\nInterpret similarity and distance between samples\nUnderstand how transformations affect data structure\nUnderstand the need for dimensionality reduction\nExplain the biological significance of computing eigenvectors and eigenvalues\nDistinguish between popularly used dimensionality reduction techniques\nIdentify appropriate methods/techniques for specific use cases\nCritically evaluate plots in practice\n\n\n\nCourse structure\nThe course has been divided into 5 modules as follows:\nModule 1: Understanding biological data structure\nModule 2: Data transformations\nModule 3: Dimensionality reduction\nModule 4: Expanding beyond the PCA\nModule 5: Practical interpretations\nOptionally: Exploratory analysis"
+  },
+  {
+    "objectID": "instructor_info.html",
+    "href": "instructor_info.html",
+    "title": "About the instructor",
+    "section": "",
+    "text": "Sonal Kumar\nI’m a PhD Candidate in the collaborative Neuroscience program offered through Tufts University and the Jackson Laboratory. My research in the Carter lab at JAX integrates multiomics data with clinical information to better understand Alzheimer’s disease-associated neurodegeneration and functional decline with aging in a non-human primate model system. Outside of my research, I’m passionate about making computational biology intuitive and accessible for students!\n\n\nContact and feedback\nIf you have any questions or would like to chat about this course, please feel free to reach out at sonal [dot] kumar [at] jax [dot] org or raise an issue in the course GitHub repository.\nYour suggestions are always welcome! If you are taking this course in May 2026, please consider filling out this form to provide feedback that can be integrated for improving subsequent offerings for this workshop."
+  },
+  {
+    "objectID": "index.html#linear-algebra-from-a-biological-perspective",
+    "href": "index.html#linear-algebra-from-a-biological-perspective",
+    "title": "Linear Algebra for Biologists",
+    "section": "",
+    "text": "This is an interactive pilot workshop aimed at strengthening foundational linear algebra concepts in the context of biological data analysis. The focus will largely be on gaining an intuitive understanding of how biological data is structured and transformed in modern analysis workflows, including clustering and dimensionality reduction methods like PCA, t-SNE, and UMAP. Participants will learn how to critically evaluate their data, choose appropriate analytical methods, and derive biologically meaningful interpretations. This course is aimed at researchers seeking a conceptual understanding of the framework typically implemented in analyzing biological data. Open to all skill levels.\n\n\n\nIntro to R I and Intro to Biostatistics preferred but not required.\n\n\n\nBy the end of this workshop, participants will be able to:\n\nRepresent biological data as vectors and matrices\nInterpret similarity and distance between samples\nUnderstand how transformations affect data structure\nUnderstand the need for dimensionality reduction\nExplain the biological significance of computing eigenvectors and eigenvalues\nDistinguish between popularly used dimensionality reduction techniques\nIdentify appropriate methods/techniques for specific use cases\nCritically evaluate plots in practice\n\n\n\n\nThe course has been divided into 5 modules as follows:\nModule 1: Understanding biological data structure\nModule 2: Data transformations\nModule 3: Dimensionality reduction\nModule 4: Expanding beyond the PCA\nModule 5: Practical interpretations\nOptionally: Exploratory analysis"
+  },
+  {
+    "objectID": "setup.html",
+    "href": "setup.html",
+    "title": "Course setup",
+    "section": "",
+    "text": "This course contains a few hands-on activities to aid understanding for some concepts we will be talking about. These have been designed to be carried out in R. To follow along, please make sure you have the following ready before coming to class.\n\n\n\n\n\n\nImportant\n\n\n\nIn case you are unable to download the specified packages, please reach out to the instructors before class.\n\n\n\nEnsure you have the latest compatible versions of RStudio and R installed for your computer. If you have not previously used R, you can install them using the Self-Service desktop application or reach out directly to JAX IT.\nMake sure you have the following packages installed. Simply copy the code chunk and run it in the RStudio console:\n\n\ninstall.packages(c(\n  \"tidyverse\",\n  \"factoextra\",\n  \"Rtsne\",\n  \"uwot\"\n))\n\n\nWe will be using the same dataset throughout the course. Please download it ahead of the class."
+  },
+  {
+    "objectID": "homework.html",
+    "href": "homework.html",
+    "title": "homework",
+    "section": "",
+    "text": "You’ve now gone through the entire course, congrats! If you’d like to further refine your understanding, complete the activities given here as homework."
+  },
+  {
+    "objectID": "module1.html",
+    "href": "module1.html",
+    "title": "module1",
+    "section": "",
+    "text": "Hey"
+  },
+  {
+    "objectID": "module3.html",
+    "href": "module3.html",
+    "title": "module3",
+    "section": "",
+    "text": "hi"
+  },
+  {
+    "objectID": "module4.html",
+    "href": "module4.html",
+    "title": "module4",
+    "section": "",
+    "text": "hi"
+  },
+  {
+    "objectID": "module5.html",
+    "href": "module5.html",
+    "title": "module5",
+    "section": "",
+    "text": "hello"
+  },
+  {
+    "objectID": "modules/module3.html",
+    "href": "modules/module3.html",
+    "title": "module3",
+    "section": "",
+    "text": "hi"
+  },
+  {
+    "objectID": "modules/module1.html",
+    "href": "modules/module1.html",
+    "title": "module1",
+    "section": "",
+    "text": "Hey"
+  },
+  {
+    "objectID": "modules/module4.html",
+    "href": "modules/module4.html",
+    "title": "module4",
+    "section": "",
+    "text": "hi"
+  },
+  {
+    "objectID": "modules/homework.html",
+    "href": "modules/homework.html",
+    "title": "homework",
+    "section": "",
+    "text": "You’ve now gone through the entire course, congrats! If you’d like to further refine your understanding, complete the activities given here as homework."
+  },
+  {
+    "objectID": "modules/module5.html",
+    "href": "modules/module5.html",
+    "title": "module5",
+    "section": "",
+    "text": "hello"
+  }
+]

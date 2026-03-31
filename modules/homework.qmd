@@ -1,0 +1,6 @@
+---
+title: "homework"
+format: html
+---
+
+You've now gone through the entire course, congrats! If you'd like to further refine your understanding, complete the activities given here as homework.

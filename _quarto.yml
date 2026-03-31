@@ -1,0 +1,36 @@
+project:
+  type: website
+
+website:
+  title: "Linear Algebra for Biologists"
+  navbar:
+    left:
+      - href: index.qmd
+        text: About this course
+      - href: setup.qmd
+        text: Setup
+      - text: Modules
+        menu: 
+          - href: modules/module1.qmd
+            text: "Module 1: Biological data structure"
+          - href: modules/module2.qmd
+            text: "Module 2: Data transformations"
+          - href: modules/module3.qmd
+            text: "Module 3: Dimensionality reduction"
+          - href: modules/module4.qmd
+            text: "Module 4: Beyond the PCA"
+          - href: modules/module5.qmd
+            text: "Module 5: Interpretation in practice"
+          - href: modules/homework.qmd
+            text: "Practice and exploration"
+      - href: instructor_info.qmd
+        text: Instructor
+
+format:
+  html:
+    theme: simplex
+    css: styles.css
+    toc: true
+
+editor: visual
+
