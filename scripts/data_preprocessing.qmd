@@ -1,0 +1,69 @@
+---
+title: "PBMC3k data preprocessing"
+subtitle: "Preparing dataset for the Linear Algebra for Biologists workshop"
+author: "Sonal Kumar"
+format:
+  html:
+    toc: true
+    code-fold: false
+execute:
+  eval: true
+  echo: true
+  warning: false
+  message: false
+---
+
+# Reading in libraries
+
+```{r}
+#| label: reading libraries
+
+library(tidyverse)
+library(factoextra)
+library(Rtsne)
+library(uwot)
+library(Seurat)
+library(SeuratData)
+```
+
+# Reading in and QC'ing the PBMC3k dataset
+
+```{r}
+#| label: reading in data
+
+#read in dataset.
+pbmc3k <- LoadData("pbmc3k")
+
+#ensuring we have enough feature depth.
+pbmc3k_qc <- subset(pbmc3k,
+                    subset = nFeature_RNA > 200 &
+                      nFeature_RNA < 2500)
+```
+
+# Subsetting 1000 cells of the total
+
+```{r}
+#| label: creating subset
+
+set.seed(123)
+
+cells_use <- pbmc3k_qc@meta.data %>%
+  tibble::rownames_to_column("cell") %>%
+  dplyr::group_by(seurat_annotations) %>%
+  dplyr::slice_sample(prop = 1000 / nrow(pbmc3k_qc@meta.data)) %>%
+  dplyr::pull(cell)
+
+pbmc_sub <- subset(pbmc3k_qc, cells = cells_use)
+```
+
+# Formatting matrices for the workshop
+
+```{r}
+#| label: extracting Seurat data as matrices
+
+counts <- GetAssayData(pbmc_sub, assay = "RNA", layer = "counts")
+
+metadata <- pbmc_sub@meta.data
+metadata$cell <- rownames(metadata)
+```
+
