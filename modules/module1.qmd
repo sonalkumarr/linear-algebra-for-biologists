@@ -1,6 +1,15 @@
 ---
-title: "module1"
+title: "Module 1: Understanding biological data structure"
 format: html
 ---
 
-Hey
+Biological datasets are often high-dimensional and can be represented using familiar mathematical structures such as vectors and matrices. In this module, we will focus on how to interpret biological data in this framework and how to compare samples based on their features.
+
+**What you’ll explore:**
+
+- What rows and columns represent in a biological dataset  
+- How to think of samples (cells) as vectors  
+- How similarity and distance between samples are defined  
+- How clustering methods group similar samples   
+
+The full content for this module will be released on the morning of the workshop! 

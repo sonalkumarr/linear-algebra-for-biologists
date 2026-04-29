@@ -1,6 +1,15 @@
 ---
-title: "module5"
+title: "Module 5: Practical interpretation"
 format: html
 ---
 
-hello
+Dimensionality reduction aids visualizations and insights into your data, but interpreting them correctly requires careful thought. This module focuses on how to critically evaluate results and avoid common pitfalls.
+
+**What you’ll explore:**
+
+- How to interpret clustering and embedding plots  
+- How preprocessing choices influence results  
+- How to identify potential artifacts such as batch effects  
+- What questions to ask when evaluating biological data  
+
+The full content for this module will be released on the morning of the workshop!

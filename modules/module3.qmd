@@ -1,6 +1,15 @@
 ---
-title: "module3"
+title: "Module 3: Need for dimensionality reduction"
 format: html
 ---
 
-hi
+Biological datasets often contain thousands of features, making them difficult to visualize and interpret directly. Dimensionality reduction provides a way to summarize this information while preserving important patterns.
+
+**What you’ll explore:**
+
+- Why dimensionality reduction is needed  
+- How Principal Component Analysis (PCA) summarizes variation in data  
+- How to interpret principal components in a biological context  
+- How much variation is captured by each component  
+
+The full content for this module will be released on the morning of the workshop!

@@ -1,6 +1,15 @@
 ---
-title: "module4"
+title: "Module 4: Expanding beyond the PCA"
 format: html
 ---
 
-hi
+While PCA is widely used, it may not always capture complex structure in high-dimensional data. Other methods, frequently using non-linear modeling, can highlight different aspects of the data.
+
+**What you’ll explore:**
+
+- How PCA compares to methods like UMAP and t-SNE  
+- The difference between global and local structure  
+- How different methods represent patterns in the data  
+- When different dimensionality reduction approaches are useful  
+
+The full content for this module will be released on the morning of the workshop!

@@ -1,5 +1,9 @@
 project:
   type: website
+  render: 
+    - "*.qmd"
+    - "!scripts/participant_workshop.qmd"
+    - "!scripts/data_preprocessing.qmd"
 
 website:
   title: "Linear Algebra for Biologists"

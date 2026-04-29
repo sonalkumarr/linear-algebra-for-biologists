@@ -1,5 +1,15 @@
 ---
-title: "module2"
+title: "Module 2: Data transformations"
 format: html
 ---
 
+Before analyzing biological data, it is often necessary to preprocess and transform it. These steps can significantly change how the data is represented and how patterns appear.
+
+**What you’ll explore:**
+
+- Why preprocessing is necessary for biological data  
+- The effect of normalization, centering, and scaling  
+- How transformations change the structure of the data  
+- How preprocessing impacts downstream analyses  
+
+The full content for this module will be released on the morning of the workshop!

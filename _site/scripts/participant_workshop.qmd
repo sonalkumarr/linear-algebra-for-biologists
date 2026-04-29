@@ -1,0 +1,22 @@
+---
+title: "Linear Algebra for Biologists"
+subtitle: "Participant Workshop Notebook"
+author: "Enter your name!"
+date: today
+format:
+  html:
+    toc: true
+    code-fold: false
+execute:
+  eval: true
+  echo: true
+  warning: false
+  message: false
+---
+
+Testing shit
+
+```{r}
+2 + 2
+```
+

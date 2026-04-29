@@ -1,0 +1,955 @@
+---
+title: "Linear Algebra for Biologists"
+subtitle: "Instructor Workshop Notebook"
+author: "Sonal Kumar"
+format:
+  html:
+    toc: true
+    code-fold: false
+execute:
+  eval: false
+  echo: true
+  warning: false
+  message: false
+---
+
+# Instructor notes
+
+This notebook is designed to accompany the workshop content.  
+Do **not** spend the full workshop walking through every line of code.
+
+Suggested use:
+
+- Run selected chunks live.
+- Use plots as teaching anchors.
+- Pause often for interpretation.
+- Skip optional chunks if running behind.
+
+Main teaching story:
+
+> Biological data can be represented as a matrix.  
+> Once data is a matrix, we can compare samples, transform the data, reduce dimensionality, and visualize structure.
+
+Dataset: PBMC3k single-cell RNA-seq data.
+
+We will treat:
+
+- cells as observations/samples
+- genes as features/variables
+- expression values as measurements
+
+# Setup
+
+```{r}
+library(tidyverse)
+library(Seurat)
+library(patchwork)
+library(uwot)
+library(Rtsne)
+
+set.seed(123)
+```
+
+```{r}
+theme_set(theme_minimal(base_size = 12))
+```
+
+# Module 1: Understanding biological data structure
+
+## Goal
+
+By the end of this module, participants should understand:
+
+- biological data as a matrix
+- rows and columns as observations and features
+- cells as vectors
+- similarity and distance between cells
+
+## Load dataset
+
+```{r}
+options(timeout = 300) # Increases timeout to 5 minutes
+SeuratData::InstallData("pbmc3k")
+
+
+SeuratData::InstallData("pbmc3k")
+pbmc <- SeuratData::LoadData("pbmc3k")
+```
+
+
+Instructor note:  
+Use a preprocessed PBMC3k object for the workshop. Avoid making participants run the full Seurat preprocessing workflow unless this is explicitly part of the course.
+
+```{r}
+pbmc <- readRDS("data/pbmc3k_clean.rds")
+pbmc
+```
+
+## Inspect metadata
+
+```{r}
+head(pbmc@meta.data)
+```
+
+```{r}
+table(pbmc$seurat_annotations)
+```
+
+Instructor pause:
+
+Ask:
+
+- What does one row in the metadata represent?
+- What kinds of information do we have about each cell?
+- Which variables are biological labels?
+- Which variables might be technical?
+
+## Extract expression matrix
+
+```{r}
+expr <- GetAssayData(pbmc, assay = "RNA", layer = "data")
+expr[1:5, 1:5]
+```
+
+```{r}
+dim(expr)
+```
+
+Instructor note:
+
+Seurat stores this matrix as:
+
+```text
+genes × cells
+```
+
+For most of our linear algebra intuition, it is easier to think in terms of:
+
+```text
+cells × genes
+```
+
+So we transpose the matrix.
+
+```{r}
+expr_t <- t(as.matrix(expr))
+dim(expr_t)
+```
+
+Instructor pause:
+
+Ask:
+
+- What does one row represent now?
+- What does one column represent now?
+- What is one cell represented as mathematically?
+
+Answer:
+
+Each cell is a vector of gene expression values.
+
+## Select variable genes
+
+Instructor note:
+
+We do not need every gene for teaching. Using all genes slows things down and adds noise.
+
+```{r}
+variable_genes <- VariableFeaturePlot(pbmc)[1:1000]
+expr_var <- expr_t[, variable_genes]
+
+dim(expr_var)
+```
+
+## Visualize a small part of the matrix
+
+```{r}
+expr_small <- expr_var[1:10, 1:10]
+expr_small
+```
+
+Instructor pause:
+
+Ask:
+
+- Is this a small matrix or a slice of a larger matrix?
+- What would a row vector mean?
+- What would a column vector mean?
+
+## Look at expression distribution
+
+```{r}
+expr_long_sample <- expr_var[
+  sample(rownames(expr_var), 300),
+  sample(colnames(expr_var), 50)
+] %>%
+  as.data.frame() %>%
+  rownames_to_column("cell") %>%
+  pivot_longer(-cell, names_to = "gene", values_to = "expression")
+
+ggplot(expr_long_sample, aes(x = expression)) +
+  geom_histogram(bins = 50) +
+  labs(
+    title = "Distribution of expression values",
+    x = "Log-normalized expression",
+    y = "Count"
+  )
+```
+
+Instructor pause:
+
+Ask:
+
+- Are most values high or low?
+- What does this suggest about biological data?
+- Is this matrix dense or sparse-ish?
+
+# Similarity and distance
+
+## Subset cells for distance calculations
+
+Instructor note:
+
+Pairwise distances across all cells can be slow and visually overwhelming. Use a subset.
+
+```{r}
+cell_subset <- sample(rownames(expr_var), 250)
+expr_subset <- expr_var[cell_subset, ]
+```
+
+## Compute distances between cells
+
+```{r}
+cell_dist <- dist(expr_subset, method = "euclidean")
+cell_dist_matrix <- as.matrix(cell_dist)
+
+cell_dist_matrix[1:5, 1:5]
+```
+
+Instructor explanation:
+
+Each value represents how far apart two cells are based on their gene expression vectors.
+
+Instructor pause:
+
+Ask:
+
+- What does a distance of 0 mean?
+- Why is the diagonal 0?
+- Why is the matrix symmetric?
+
+## Hierarchical clustering
+
+```{r}
+hc <- hclust(cell_dist)
+
+plot(hc, labels = FALSE, main = "Hierarchical clustering of cells")
+```
+
+Instructor pause:
+
+Ask:
+
+- What is being clustered?
+- What information was used to cluster cells?
+- Do we know yet whether these clusters are biologically meaningful?
+
+## Heatmap of cell distances
+
+```{r}
+heatmap(
+  cell_dist_matrix,
+  Rowv = as.dendrogram(hc),
+  Colv = as.dendrogram(hc),
+  scale = "none",
+  labRow = FALSE,
+  labCol = FALSE,
+  main = "Cell-cell distance matrix"
+)
+```
+
+Instructor note:
+
+This is a good moment to connect:
+
+- similarity
+- distance
+- clustering
+- visual structure
+
+# Module 2: Transformations
+
+## Goal
+
+By the end of this module, participants should understand:
+
+- centering
+- scaling
+- why preprocessing changes data geometry
+- why transformations affect downstream analyses
+
+## Gene means and variances
+
+```{r}
+gene_summary <- tibble(
+  gene = colnames(expr_var),
+  mean_expression = apply(expr_var, 2, mean),
+  variance = apply(expr_var, 2, var),
+  sd = apply(expr_var, 2, sd)
+)
+
+head(gene_summary)
+```
+
+```{r}
+ggplot(gene_summary, aes(x = mean_expression, y = variance)) +
+  geom_point(alpha = 0.5, size = 1) +
+  labs(
+    title = "Mean expression vs variance",
+    x = "Mean expression",
+    y = "Variance"
+  )
+```
+
+Instructor pause:
+
+Ask:
+
+- Do all genes vary equally?
+- Why might highly variable genes dominate analyses?
+- Is high variance always biological?
+
+## Center data
+
+```{r}
+expr_centered <- scale(expr_var, center = TRUE, scale = FALSE)
+```
+
+Check one gene before and after centering:
+
+```{r}
+example_gene <- colnames(expr_var)[1]
+
+mean(expr_var[, example_gene])
+mean(expr_centered[, example_gene])
+```
+
+Instructor explanation:
+
+Centering shifts each gene so its mean is 0.
+
+## Scale data
+
+```{r}
+expr_scaled <- scale(expr_var, center = TRUE, scale = TRUE)
+```
+
+Check one gene before and after scaling:
+
+```{r}
+sd(expr_var[, example_gene])
+sd(expr_scaled[, example_gene])
+```
+
+Instructor explanation:
+
+Scaling makes each gene have standard deviation 1.
+
+## Compare raw, centered, and scaled values
+
+```{r}
+compare_gene_df <- tibble(
+  cell = rownames(expr_var),
+  raw = expr_var[, example_gene],
+  centered = expr_centered[, example_gene],
+  scaled = expr_scaled[, example_gene]
+) %>%
+  pivot_longer(-cell, names_to = "version", values_to = "value")
+
+ggplot(compare_gene_df, aes(x = value)) +
+  geom_histogram(bins = 40) +
+  facet_wrap(~ version, scales = "free") +
+  labs(
+    title = paste("Effect of centering and scaling on", example_gene),
+    x = "Value",
+    y = "Count"
+  )
+```
+
+Instructor pause:
+
+Ask:
+
+- What changed after centering?
+- What changed after scaling?
+- Did the relative ordering of cells change for this gene?
+
+# Module 3: Dimensionality reduction with PCA
+
+## Goal
+
+By the end of this module, participants should understand:
+
+- why high-dimensional data is hard to visualize
+- PCA as a rotation of the data
+- PCs as directions of variation
+- variance explained
+- loadings as gene contributions
+
+## Run PCA on unscaled data
+
+```{r}
+pca_unscaled <- prcomp(expr_var, center = TRUE, scale. = FALSE)
+```
+
+```{r}
+pca_unscaled_df <- as_tibble(pca_unscaled$x[, 1:2], rownames = "cell") %>%
+  left_join(
+    pbmc@meta.data %>% rownames_to_column("cell"),
+    by = "cell"
+  )
+```
+
+```{r}
+ggplot(pca_unscaled_df, aes(x = PC1, y = PC2, color = seurat_annotations)) +
+  geom_point(size = 0.7, alpha = 0.7) +
+  labs(
+    title = "PCA on centered, unscaled data",
+    color = "Cell type"
+  )
+```
+
+Instructor pause:
+
+Ask:
+
+- What structure do we see?
+- Are cell types separated?
+- What might dominate this PCA?
+
+## Run PCA on scaled data
+
+```{r}
+pca_scaled <- prcomp(expr_scaled, center = FALSE, scale. = FALSE)
+```
+
+```{r}
+pca_scaled_df <- as_tibble(pca_scaled$x[, 1:2], rownames = "cell") %>%
+  left_join(
+    pbmc@meta.data %>% rownames_to_column("cell"),
+    by = "cell"
+  )
+```
+
+```{r}
+ggplot(pca_scaled_df, aes(x = PC1, y = PC2, color = seurat_annotations)) +
+  geom_point(size = 0.7, alpha = 0.7) +
+  labs(
+    title = "PCA on scaled data",
+    color = "Cell type"
+  )
+```
+
+Instructor pause:
+
+Ask:
+
+- How did scaling change the PCA?
+- Which version is easier to interpret?
+- Does scaling always make things better?
+
+## Compare PCA with and without labels
+
+```{r}
+ggplot(pca_scaled_df, aes(x = PC1, y = PC2)) +
+  geom_point(size = 0.7, alpha = 0.7) +
+  labs(title = "PCA without cell-type labels")
+```
+
+```{r}
+ggplot(pca_scaled_df, aes(x = PC1, y = PC2, color = seurat_annotations)) +
+  geom_point(size = 0.7, alpha = 0.7) +
+  labs(
+    title = "PCA with cell-type labels",
+    color = "Cell type"
+  )
+```
+
+Instructor note:
+
+This is a good place to emphasize:
+
+> Dimensionality reduction does not know the labels.  
+> We add labels afterward to interpret the structure.
+
+## Variance explained
+
+```{r}
+variance_explained <- pca_scaled$sdev^2 / sum(pca_scaled$sdev^2)
+
+variance_df <- tibble(
+  PC = seq_along(variance_explained),
+  variance_explained = variance_explained
+)
+
+ggplot(variance_df[1:30, ], aes(x = PC, y = variance_explained)) +
+  geom_col() +
+  labs(
+    title = "Variance explained by principal components",
+    x = "Principal component",
+    y = "Proportion of variance explained"
+  )
+```
+
+Instructor pause:
+
+Ask:
+
+- Why does PC1 explain the most variance?
+- Why do later PCs explain less?
+- How many PCs would you keep?
+
+## Cumulative variance explained
+
+```{r}
+variance_df <- variance_df %>%
+  mutate(cumulative_variance = cumsum(variance_explained))
+
+ggplot(variance_df[1:50, ], aes(x = PC, y = cumulative_variance)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    title = "Cumulative variance explained",
+    x = "Number of PCs",
+    y = "Cumulative variance explained"
+  )
+```
+
+Instructor note:
+
+In single-cell data, variance is often spread across many PCs.  
+This is normal and useful to discuss.
+
+## PCA loadings
+
+```{r}
+loadings_df <- tibble(
+  gene = rownames(pca_scaled$rotation),
+  PC1 = pca_scaled$rotation[, 1],
+  PC2 = pca_scaled$rotation[, 2]
+)
+
+loadings_df %>%
+  arrange(desc(abs(PC1))) %>%
+  slice_head(n = 10)
+```
+
+```{r}
+loadings_df %>%
+  arrange(desc(abs(PC2))) %>%
+  slice_head(n = 10)
+```
+
+Instructor explanation:
+
+Loadings tell us which genes contribute strongly to a principal component.
+
+Instructor pause:
+
+Ask:
+
+- If a gene has a large loading on PC1, what does that mean?
+- Does PCA know which genes are biologically important?
+- How would we interpret these genes carefully?
+
+# Module 4: Beyond PCA — UMAP and t-SNE
+
+## Goal
+
+By the end of this module, participants should understand:
+
+- PCA, UMAP, and t-SNE are all dimensionality reduction methods
+- PCA emphasizes global linear structure
+- UMAP and t-SNE emphasize local neighborhood structure
+- visualizations are tools, not proof
+
+## Use PCs as input
+
+Instructor note:
+
+For UMAP and t-SNE, we usually do not use all genes directly.  
+We use top PCs as a lower-dimensional representation of the data.
+
+```{r}
+pca_coords <- pca_scaled$x[, 1:20]
+dim(pca_coords)
+```
+
+## Run UMAP
+
+```{r}
+umap_coords <- umap(
+  pca_coords,
+  n_neighbors = 15,
+  min_dist = 0.3,
+  metric = "euclidean"
+)
+```
+
+```{r}
+umap_df <- as_tibble(umap_coords, .name_repair = "unique") %>%
+  rename(UMAP1 = ...1, UMAP2 = ...2) %>%
+  mutate(cell = rownames(pca_coords)) %>%
+  left_join(
+    pbmc@meta.data %>% rownames_to_column("cell"),
+    by = "cell"
+  )
+```
+
+```{r}
+ggplot(umap_df, aes(x = UMAP1, y = UMAP2, color = seurat_annotations)) +
+  geom_point(size = 0.7, alpha = 0.7) +
+  labs(
+    title = "UMAP of PBMC3k",
+    color = "Cell type"
+  )
+```
+
+Instructor pause:
+
+Ask:
+
+- What looks different from PCA?
+- Are clusters more separated?
+- Does more separation mean more truth?
+
+## Run t-SNE
+
+Instructor note:
+
+This may take a little longer. Pre-run if needed.
+
+```{r}
+tsne_coords <- Rtsne(
+  pca_coords,
+  dims = 2,
+  perplexity = 30,
+  verbose = FALSE
+)$Y
+```
+
+```{r}
+tsne_df <- as_tibble(tsne_coords, .name_repair = "unique") %>%
+  rename(tSNE1 = ...1, tSNE2 = ...2) %>%
+  mutate(cell = rownames(pca_coords)) %>%
+  left_join(
+    pbmc@meta.data %>% rownames_to_column("cell"),
+    by = "cell"
+  )
+```
+
+```{r}
+ggplot(tsne_df, aes(x = tSNE1, y = tSNE2, color = seurat_annotations)) +
+  geom_point(size = 0.7, alpha = 0.7) +
+  labs(
+    title = "t-SNE of PBMC3k",
+    color = "Cell type"
+  )
+```
+
+## Compare PCA, UMAP, and t-SNE
+
+```{r}
+p_pca <- ggplot(pca_scaled_df, aes(x = PC1, y = PC2, color = seurat_annotations)) +
+  geom_point(size = 0.5, alpha = 0.7) +
+  labs(title = "PCA", color = "Cell type") +
+  theme(legend.position = "none")
+
+p_umap <- ggplot(umap_df, aes(x = UMAP1, y = UMAP2, color = seurat_annotations)) +
+  geom_point(size = 0.5, alpha = 0.7) +
+  labs(title = "UMAP", color = "Cell type") +
+  theme(legend.position = "none")
+
+p_tsne <- ggplot(tsne_df, aes(x = tSNE1, y = tSNE2, color = seurat_annotations)) +
+  geom_point(size = 0.5, alpha = 0.7) +
+  labs(title = "t-SNE", color = "Cell type")
+
+p_pca + p_umap + p_tsne
+```
+
+Instructor pause:
+
+Ask:
+
+- Which method separates clusters most clearly?
+- Which method is easiest to overinterpret?
+- Which method preserves global structure best?
+- Are distances between clusters meaningful in all plots?
+
+# Module 5: How preprocessing changes interpretation
+
+## Goal
+
+By the end of this module, participants should understand:
+
+- analysis choices affect visual output
+- different parameter choices can change interpretation
+- plots should be interpreted critically
+
+## Try fewer variable genes
+
+```{r}
+variable_genes_200 <- VariableFeatures(pbmc)[1:200]
+expr_200 <- expr_t[, variable_genes_200]
+expr_200_scaled <- scale(expr_200, center = TRUE, scale = TRUE)
+
+pca_200 <- prcomp(expr_200_scaled, center = FALSE, scale. = FALSE)
+pca_200_df <- as_tibble(pca_200$x[, 1:2], rownames = "cell") %>%
+  left_join(
+    pbmc@meta.data %>% rownames_to_column("cell"),
+    by = "cell"
+  )
+```
+
+```{r}
+ggplot(pca_200_df, aes(x = PC1, y = PC2, color = seurat_annotations)) +
+  geom_point(size = 0.7, alpha = 0.7) +
+  labs(
+    title = "PCA using top 200 variable genes",
+    color = "Cell type"
+  )
+```
+
+## Try more variable genes
+
+```{r}
+variable_genes_2000 <- VariableFeatures(pbmc)[1:2000]
+expr_2000 <- expr_t[, variable_genes_2000]
+expr_2000_scaled <- scale(expr_2000, center = TRUE, scale = TRUE)
+
+pca_2000 <- prcomp(expr_2000_scaled, center = FALSE, scale. = FALSE)
+pca_2000_df <- as_tibble(pca_2000$x[, 1:2], rownames = "cell") %>%
+  left_join(
+    pbmc@meta.data %>% rownames_to_column("cell"),
+    by = "cell"
+  )
+```
+
+```{r}
+ggplot(pca_2000_df, aes(x = PC1, y = PC2, color = seurat_annotations)) +
+  geom_point(size = 0.7, alpha = 0.7) +
+  labs(
+    title = "PCA using top 2000 variable genes",
+    color = "Cell type"
+  )
+```
+
+Instructor pause:
+
+Ask:
+
+- Did the plot change?
+- Why would gene selection affect PCA?
+- Which version would you trust more, and why?
+
+## UMAP with different number of PCs
+
+```{r}
+umap_5pcs <- umap(pca_scaled$x[, 1:5])
+umap_50pcs <- umap(pca_scaled$x[, 1:50])
+```
+
+```{r}
+umap_5_df <- as_tibble(umap_5pcs, .name_repair = "unique") %>%
+  rename(UMAP1 = ...1, UMAP2 = ...2) %>%
+  mutate(cell = rownames(pca_scaled$x)) %>%
+  left_join(
+    pbmc@meta.data %>% rownames_to_column("cell"),
+    by = "cell"
+  )
+
+umap_50_df <- as_tibble(umap_50pcs, .name_repair = "unique") %>%
+  rename(UMAP1 = ...1, UMAP2 = ...2) %>%
+  mutate(cell = rownames(pca_scaled$x)) %>%
+  left_join(
+    pbmc@meta.data %>% rownames_to_column("cell"),
+    by = "cell"
+  )
+```
+
+```{r}
+p_umap_5 <- ggplot(umap_5_df, aes(x = UMAP1, y = UMAP2, color = seurat_annotations)) +
+  geom_point(size = 0.5, alpha = 0.7) +
+  labs(title = "UMAP using 5 PCs") +
+  theme(legend.position = "none")
+
+p_umap_20 <- ggplot(umap_df, aes(x = UMAP1, y = UMAP2, color = seurat_annotations)) +
+  geom_point(size = 0.5, alpha = 0.7) +
+  labs(title = "UMAP using 20 PCs") +
+  theme(legend.position = "none")
+
+p_umap_50 <- ggplot(umap_50_df, aes(x = UMAP1, y = UMAP2, color = seurat_annotations)) +
+  geom_point(size = 0.5, alpha = 0.7) +
+  labs(title = "UMAP using 50 PCs")
+
+p_umap_5 + p_umap_20 + p_umap_50
+```
+
+Instructor pause:
+
+Ask:
+
+- How much did the UMAP change?
+- What does this tell us about parameter choices?
+- Why should we report preprocessing choices?
+
+# Module 6: Interpreting plots in practice
+
+## Goal
+
+By the end of this module, participants should be able to critically evaluate dimensionality reduction plots.
+
+## Hide labels first
+
+```{r}
+ggplot(umap_df, aes(x = UMAP1, y = UMAP2)) +
+  geom_point(size = 0.7, alpha = 0.7) +
+  labs(title = "UMAP without labels")
+```
+
+Instructor activity:
+
+Ask participants:
+
+- How many groups do you see?
+- Are all groups equally separated?
+- Do any cells appear intermediate?
+- What would you want to know before interpreting this?
+
+## Reveal labels
+
+```{r}
+ggplot(umap_df, aes(x = UMAP1, y = UMAP2, color = seurat_annotations)) +
+  geom_point(size = 0.7, alpha = 0.7) +
+  labs(
+    title = "UMAP with cell-type annotations",
+    color = "Cell type"
+  )
+```
+
+Instructor pause:
+
+Ask:
+
+- Did the labels match expectations?
+- Are any cell types mixed?
+- Does overlap mean the labels are wrong?
+- Does separation mean the biology is simple?
+
+## Color by technical metrics
+
+```{r}
+ggplot(umap_df, aes(x = UMAP1, y = UMAP2, color = nFeature_RNA)) +
+  geom_point(size = 0.7, alpha = 0.7) +
+  labs(
+    title = "UMAP colored by number of detected genes",
+    color = "nFeature_RNA"
+  )
+```
+
+```{r}
+ggplot(umap_df, aes(x = UMAP1, y = UMAP2, color = percent.mt)) +
+  geom_point(size = 0.7, alpha = 0.7) +
+  labs(
+    title = "UMAP colored by mitochondrial percentage",
+    color = "percent.mt"
+  )
+```
+
+Instructor note:
+
+This is the “be careful” moment.
+
+Emphasize:
+
+> A plot can reflect biology, technical variation, or both.
+
+# Final synthesis
+
+## Core questions for interpreting any dimensionality reduction plot
+
+Ask:
+
+1. What are the observations?
+2. What are the features?
+3. What preprocessing was done?
+4. What distance or similarity concept is implied?
+5. What method was used?
+6. What does the method preserve?
+7. What labels or metadata were added after the fact?
+8. Could technical factors explain the structure?
+9. What follow-up analysis would you need?
+
+# Optional hands-on exercise
+
+Instructor note:
+
+Use this only if there is time. Otherwise assign as homework.
+
+## Student task
+
+Use the same PBMC3k dataset and answer:
+
+1. What happens if you use 500 variable genes instead of 1000?
+2. What happens if you run UMAP using 10 PCs instead of 20?
+3. Which plot gives the clearest cell-type separation?
+4. Which plot would you be most cautious about interpreting?
+5. What preprocessing choice had the biggest visible effect?
+
+## Starter code
+
+```{r eval=FALSE}
+# Choose number of variable genes
+n_genes <- 500
+
+genes_use <- VariableFeatures(pbmc)[1:n_genes]
+
+expr_use <- expr_t[, genes_use]
+expr_use_scaled <- scale(expr_use, center = TRUE, scale = TRUE)
+
+pca_use <- prcomp(expr_use_scaled, center = FALSE, scale. = FALSE)
+
+pca_use_df <- as_tibble(pca_use$x[, 1:2], rownames = "cell") %>%
+  left_join(
+    pbmc@meta.data %>% rownames_to_column("cell"),
+    by = "cell"
+  )
+
+ggplot(pca_use_df, aes(x = PC1, y = PC2, color = seurat_annotations)) +
+  geom_point(size = 0.7, alpha = 0.7)
+```
+
+```{r eval=FALSE}
+# Choose number of PCs
+n_pcs <- 10
+
+umap_use <- umap(pca_use$x[, 1:n_pcs])
+
+umap_use_df <- as_tibble(umap_use, .name_repair = "unique") %>%
+  rename(UMAP1 = ...1, UMAP2 = ...2) %>%
+  mutate(cell = rownames(pca_use$x)) %>%
+  left_join(
+    pbmc@meta.data %>% rownames_to_column("cell"),
+    by = "cell"
+  )
+
+ggplot(umap_use_df, aes(x = UMAP1, y = UMAP2, color = seurat_annotations)) +
+  geom_point(size = 0.7, alpha = 0.7)
+```
+
+# Closing
+
+Main takeaway:
+
+> Dimensionality reduction is not just about making pretty plots.  
+> It is about deciding how to represent, transform, summarize, and interpret high-dimensional biological data.

@@ -1,6 +1,22 @@
 ---
-title: "homework"
+title: "Exploratory analysis"
 format: html
 ---
 
 You've now gone through the entire course, congrats! If you'd like to further refine your understanding, complete the activities given here as homework.
+
+This optional exercise allows you to apply the concepts from the workshop to a new dataset.
+
+**What you’ll explore:** 
+
+- How to approach a dataset from start to finish\
+- How preprocessing affects results\
+- How to choose appropriate methods\
+- How to interpret outputs in a biological context
+
+**What to do now:** 
+
+- No preparation required\
+- This activity can be completed during or after the workshop
+
+Details for this exercise will be shared during the workshop!

@@ -177,7 +177,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#environment" id="toc-environment" class="nav-link active" data-scroll-target="#environment">1. Environment</a></li>
+  <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">2. Data</a></li>
+  <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code">3. Code</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -201,7 +209,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>This course contains a few hands-on activities to aid understanding for some concepts we will be talking about. These have been designed to be carried out in R. To follow along, please make sure you have the following ready before coming to class.</p>
+<p>This course contains a few hands-on activities to aid understanding for some concepts we will cover. These have been designed to be carried out in R. To follow along, please make sure you have the following ready before coming to class.</p>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -212,11 +220,13 @@ Important
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>In case you are unable to download the specified packages, please reach out to the instructors before class.</p>
+<p>In case you are unable to download the specified packages or dataset, please reach out to the instructors <strong>before</strong> class.</p>
 </div>
 </div>
+<section id="environment" class="level2">
+<h2 class="anchored" data-anchor-id="environment">1. Environment</h2>
 <ol type="1">
-<li><p>Ensure you have the latest compatible versions of RStudio and R installed for your computer. If you have not previously used R, you can install them using the Self-Service desktop application or reach out directly to JAX IT.</p></li>
+<li><p>Ensure you have the latest compatible versions of RStudio and R installed for your computer. If you have not previously used R/RStudio, you can install them using the Self-Service desktop application or by reaching out directly to JAX IT.</p></li>
 <li><p>Make sure you have the following packages installed. Simply copy the code chunk and run it in the RStudio console:</p></li>
 </ol>
 <div class="cell">
@@ -228,10 +238,49 @@ Important
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ol start="3" type="1">
-<li>We will be using the same dataset throughout the course. Please download it ahead of the class.</li>
+<li>To make sure the packages installed correctly, go ahead and try loading them in by running the following in the console:</li>
 </ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(factoextra)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Rtsne)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(uwot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="data" class="level2">
+<h2 class="anchored" data-anchor-id="data">2. Data</h2>
+<p>We will be using the same dataset throughout the course. The original study sequenced 2,700 peripheral blood mononuclear cells (PBMCs) from a healthy donor, which is freely available as the <a href="https://www.10xgenomics.com/datasets/3-k-pbm-cs-from-a-healthy-donor-1-standard-1-1-0">PBMC3k dataset from 10X Genomics</a>.</p>
+<p>We have generated a subset of this dataset for demonstration in this workshop. Briefly, we did xyz to the data. As the focus of the course is not on analyzing single cell RNASeq in R using Seurat, we’ve tried to retain a high-dimensional dataset that can still be analyzed easily locally on personal computers. More details on data preprocessing are given in this <a href="./scripts/data_preprocessing.qmd" download="">script</a>.</p>
+<p>Clicking on <a href="./data/pbmc3k_subset.rds">this link</a> should start the download of the <code>.rds</code> file. This is a file type that allows reading in R objects directly, and are often better for reproducibility. Once downloaded, you can load your data in the workspace like so:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#load file in your workspace.</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"pbmc3k_subset.rds"</span>) <span class="co">#remember to confirm the path to your file.</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#data is a list of many files, and individual files can be accessed like so:</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>pbmc3k <span class="ot">&lt;-</span> data<span class="sc">$</span>readcounts</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>metadata <span class="ot">&lt;-</span> data<span class="sc">$</span>metadata</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="code" class="level2">
+<h2 class="anchored" data-anchor-id="code">3. Code</h2>
+<p>While individual course modules will be populated with relevant code that can be followed to reproduce results, it is recommended to download and work on this <a href="./scripts/participant_workshop.qmd" download="">Quarto document for course participants</a>. You will be using it throughout the workshop, and you can run through it line by line with the instructor and make any notes, if needed.</p>
+<p>This is all that you need to get started!</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If you’d like to follow along with the class in real time, then please plan to come with these installed/downloaded. As this is a short workshop, we will not have time to troubleshoot software installations!</p>
+</div>
+</div>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

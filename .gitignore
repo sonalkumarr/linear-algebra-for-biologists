@@ -1,1 +1,4 @@
 /.quarto/
+.Rproj.user
+
+./scripts/instructor_workshop.qmd

@@ -8,7 +8,9 @@ This is an interactive pilot workshop aimed at strengthening foundational linear
 **Open to all skill levels.**
 
 ### Prerequisites 
-_Intro to R I_ and _Intro to Biostatistics_ preferred but not required.  
+_Intro to R I_ and _Intro to Biostatistics I_ preferred but not required.  
+
+---
 
 ### Learning objectives
 By the end of this workshop, participants will be able to:
@@ -22,18 +24,25 @@ By the end of this workshop, participants will be able to:
 -	Identify appropriate methods/techniques for specific use cases
 -	Critically evaluate plots in practice
 
+---
+
 ### Course structure
-The course has been divided into 5 modules as follows:
+The course has been divided into 5 modules and an optional take-home activity as follows:
 
-**Module 1: Understanding biological data structure** 
+**Module 1: Understanding biological data structure**  
+Biological data is often high-dimensional and can be represented using linear algebraic structures such as vectors and matrices. This module introduces how to think about biological datasets in terms of samples, features, and similarity.
 
-**Module 2: Data transformations**
+**Module 2: Data transformations**  
+Preprocessing steps such as normalization, centering, and scaling can substantially change how data is represented and interpreted. This module explores how these transformations impact data structure and downstream analysis.
 
-**Module 3: Dimensionality reduction**
+**Module 3: Dimensionality reduction**  
+High-dimensional datasets are difficult to visualize and interpret directly. This module introduces dimensionality reduction using Principal Component Analysis (PCA), focusing on intuitive interpretation and the biological meaning of principal components.
 
-**Module 4: Expanding beyond the PCA**
+**Module 4: Beyond PCA**  
+While PCA captures global structure, it may not fully resolve complex patterns in high-dimensional data. This module introduces nonlinear dimensionality reduction methods such as UMAP and t-SNE, and discusses how they differ from PCA.
 
-**Module 5: Practical interpretations**
+**Module 5: Practical interpretation**  
+This module focuses on interpreting real-world results. Participants will learn how to evaluate plots, identify potential artifacts (e.g., batch effects), and determine which analytical methods are appropriate for different datasets.
 
-**Optionally: Exploratory analysis**
-
+**Optional: Exploratory analysis**  
+Participants can apply the concepts learned in the workshop to analyze a new dataset, exploring its structure and drawing informed conclusions about underlying biological patterns.

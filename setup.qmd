@@ -3,13 +3,15 @@ title: "Course setup"
 format: html
 ---
 
-This course contains a few hands-on activities to aid understanding for some concepts we will be talking about. These have been designed to be carried out in R. To follow along, please make sure you have the following ready before coming to class.
+This course contains a few hands-on activities to aid understanding for some concepts we will cover. These have been designed to be carried out in R. To follow along, please make sure you have the following ready before coming to class.
 
 ::: callout-important
-In case you are unable to download the specified packages, please reach out to the instructors before class.
+In case you are unable to download the specified packages or dataset, please reach out to the instructors **before** class.
 :::
 
-1.  Ensure you have the latest compatible versions of RStudio and R installed for your computer. If you have not previously used R, you can install them using the Self-Service desktop application or reach out directly to JAX IT.
+## 1. Environment
+
+1.  Ensure you have the latest compatible versions of RStudio and R installed for your computer. If you have not previously used R/RStudio, you can install them using the Self-Service desktop application or by reaching out directly to JAX IT.
 
 2.  Make sure you have the following packages installed. Simply copy the code chunk and run it in the RStudio console:
 
@@ -24,4 +26,42 @@ install.packages(c(
 ))
 ```
 
-3.  We will be using the same dataset throughout the course. Please download it ahead of the class.
+3. To make sure the packages installed correctly, go ahead and try loading them in by running the following in the console:
+
+```{r}
+#| eval: false
+
+library(tidyverse)
+library(factoextra)
+library(Rtsne)
+library(uwot)
+```
+
+## 2. Data
+
+We will be using the same dataset throughout the course. The original study sequenced 2,700 peripheral blood mononuclear cells (PBMCs) from a healthy donor, which is freely available as the [PBMC3k dataset from 10X Genomics](https://www.10xgenomics.com/datasets/3-k-pbm-cs-from-a-healthy-donor-1-standard-1-1-0).
+
+We have generated a subset of this dataset for demonstration in this workshop. Briefly, we did xyz to the data. As the focus of the course is not on analyzing single cell RNASeq in R using Seurat, we've tried to retain a high-dimensional dataset that can still be analyzed easily locally on personal computers. More details on data preprocessing are given in this <a href="./scripts/data_preprocessing.qmd" download>script</a>.
+
+Clicking on [this link](./data/pbmc3k_subset.rds) should start the download of the `.rds` file. This is a file type that allows reading in R objects directly, and are often better for reproducibility. Once downloaded, you can load your data in the workspace like so:
+
+```{r}
+#| eval: false
+
+#load file in your workspace.
+data <- readRDS("pbmc3k_subset.rds") #remember to confirm the path to your file.
+
+#data is a list of many files, and individual files can be accessed like so:
+pbmc3k <- data$readcounts
+metadata <- data$metadata
+```
+
+## 3. Code
+
+While individual course modules will be populated with relevant code that can be followed to reproduce results, it is recommended to download and work on this <a href="./scripts/participant_workshop.qmd" download>Quarto document for course participants</a>. You will be using it throughout the workshop, and you can run through it line by line with the instructor and make any notes, if needed.
+
+This is all that you need to get started! 
+
+::: {.callout-note}
+If you'd like to follow along with the class in real time, then please plan to come with these installed/downloaded. As this is a short workshop, we will not have time to troubleshoot software installations!
+:::
