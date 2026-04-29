@@ -2,5 +2,5 @@
 
 Workshop website for the Linear Algebra for Biologists course. Developed for the JAX Data Science Curriculum.
 
-The website can be accessed [here](www.sonalkumarr.github.io/linear-algebra-for-biologists/). 
+The website can be accessed [here](https://sonalkumarr.github.io/linear-algebra-for-biologists/). 
 
