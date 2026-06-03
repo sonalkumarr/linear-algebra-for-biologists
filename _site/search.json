@@ -25,7 +25,7 @@
     "href": "setup.html#code",
     "title": "Course setup",
     "section": "3. Code",
-    "text": "3. Code\nA Quarto document has been prepared and is available for participants to follow along with the workshop. It is recommended to download and work on this participant notebook. You will be using it throughout the workshop, and you can run through it line by line with the instructor and make any notes as needed.\nThis is all that you need to get started!\n\n\n\n\n\n\nNote\n\n\n\nIf you’d like to follow along with the class in real time, then please plan to come with these installed/downloaded. As this is a short workshop, we will not have time to troubleshoot software installations!"
+    "text": "3. Code\nA Quarto document has been prepared and is available for participants to follow along with the workshop. It is recommended to download and work on this file. You will be using it throughout the workshop, and you can run through it line by line with the instructor and make any notes as needed.\nTo download it, click on this link to the participant notebook.\nThis will take you to the script on GitHub, you can download it by clicking the icon corresponding to ‘Download raw file’, as shown below:\nDownload icon for the script on GitHub\nThis is all that you need to get started!\n\n\n\n\n\n\nNote\n\n\n\nIf you’d like to follow along with the class in real time, then please plan to come with these installed/downloaded. As this is a short workshop, we will not have time to troubleshoot software installations!"
   },
   {
     "objectID": "modules/module5.html",
