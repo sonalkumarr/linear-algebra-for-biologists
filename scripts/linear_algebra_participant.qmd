@@ -1,0 +1,492 @@
+---
+title: "Linear Algebra for Biologists Workshop"
+author: "Your name here"
+date: "June 4, 2026"
+format:
+  html:
+    toc: true
+    code-fold: false
+    code-tools: true
+    number-sections: false
+    embed-resources: true
+execute:
+  warning: false
+  message: false
+  cache: false
+---
+
+::: callout-tip
+## How to use this notebook
+
+**This notebook is for you, the participant!** Each demo is a self-contained code chunk, so all you have to do is run it. Feel free to take notes and add comments throughout the code, the idea is to have this document serve as a reference for you!
+:::
+
+## Setup
+
+Run this chunk to set things up for the rest of the workshop. This should take less than 5 mins to finish running.
+
+```{r}
+#| label: R setup
+
+#load packages.
+library(tidyverse)
+library(factoextra)
+library(Rtsne)
+library(uwot)
+library(patchwork)
+library(Seurat)
+
+#load dataset.
+data("pbmc_small") #small single cell expression matrix, already log-normalized for our use.
+
+#extract dataset we will work with, and convert to cells x genes format.
+pbmc <- t(as.matrix(pbmc_small[["RNA"]]$data))
+
+#extract metadata.
+metadata <- pbmc_small@meta.data %>%
+  as_tibble(rownames = "cell_id") %>%
+  select(cell_id,
+         cluster = RNA_snn_res.1,
+         group = groups,
+         n_counts = nCount_RNA,
+         n_genes = nFeature_RNA) %>%
+  mutate(cluster = paste0("Cluster ", cluster))
+
+#checking:
+cat("=== Ready ===\n")
+cat("  Cells:", nrow(pbmc), "\n")
+cat("  Genes:", ncol(pbmc), "\n")
+cat("  Clusters:", paste(sort(unique(metadata$cluster)), collapse = ", "), "\n")
+cat("  Groups:  ", paste(unique(metadata$group),   collapse = ", "), "\n")
+```
+
+::: callout-tip
+## Expected output
+
+`Cells: 80   Genes: 230`
+
+If you see an error, make sure you have all packages, namely `Seurat`, `tidyverse`, `factoextra`, `Rtsne`, `uwot`, and `patchwork` correctly installed. Follow instructions given on the [Setup](https://sonalkumarr.github.io/linear-algebra-for-biologists/setup.html) page of the course website to do so if you haven't yet.
+:::
+
+# Module 1
+
+## Demo 1: Your data is a matrix
+
+```{r}
+#| label: demo 1a
+
+#check matrix dimensions.
+dim(pbmc)
+
+#print 6 cells and 8 genes.
+pbmc[1:6, 1:8]
+```
+
+::: callout-important
+## Discussion
+
+How many genes and cells are captured in this dataset? How many dimensions does your data have?
+:::
+
+```{r}
+#| label: demo 1b
+
+#cells with expression for two genes.
+tibble(x = pbmc[, "MS4A1"],
+       y = pbmc[, "CD14"],
+  cluster = metadata$cluster) %>%
+  ggplot(aes(x, y, color = cluster)) +
+  geom_point(size = 3, alpha = 0.8) +
+  scale_color_brewer(palette = "Set2") +
+  labs(title = "Cells in 2D gene space",
+       x = "MS4A1 expression",
+       y = "CD14 expression",
+       color = "Cluster") +
+  theme_classic(base_size = 12)
+```
+
+::: callout-important
+## Discussion
+
+1.  What does each point on the plot represent?
+2.  How many axes would you need to show all information with respect to a cell?
+3.  What do you take away from this plot? What can you comment about the cell clusters?
+:::
+
+## Demo 2: Distance and dimensionality
+
+```{r}
+#| label: demo 2
+
+#calculate distance matrix.
+dist_pbmc <- as.matrix(dist(x = pbmc, method = "euclidean"))
+
+#selecting cells in a cluster-specific way.
+same_idx <- which(metadata$cluster == metadata$cluster[1])[1:2]
+diff_idx <- which(metadata$cluster != metadata$cluster[1])[1]
+
+cat("Same cluster: ", round(dist_pbmc[same_idx[1], same_idx[2]], 2), "\n")
+cat("Different cluster: ", round(dist_pbmc[same_idx[1], diff_idx], 2), "\n\n")
+
+#calculate average pairwise distance as dimensions increase.
+set.seed(42)
+
+dims <- c(2, 5, 10, 30, 100, 230)
+data.frame(dimensions = dims,
+           avg_distance = round(sapply(dims, function(n_dims) mean(dist(pbmc[1:10, 1:n_dims]))), 2)
+)
+```
+
+::: callout-important
+## Discussion
+
+1.  What can you say about the cells that were used for calculating average distance with increasing dimensions?
+2.  What do you think will happen with multiple cell identities, and several thousands of measured genes?
+:::
+
+## Demo 3: Which genes are informative?
+
+```{r}
+#| label: demo 3
+
+#calculating variance for each gene.
+gene_vars <- sort(apply(pbmc, 2, var), decreasing = TRUE)
+
+var_df <- tibble(rank = seq_along(gene_vars),
+                 variance = gene_vars,
+                 gene = names(gene_vars))
+
+#plotting genes ranked by variance.
+ggplot(var_df, aes(x = rank, y = variance)) +
+  geom_line(color = "skyblue3", linewidth = 0.9) +
+  geom_point(data = slice_head(var_df, n = 8), color = "firebrick", size = 1.2) +
+  geom_point(data = slice_tail(var_df, n = 5), color = "grey40", size = 1.2) +
+  ggrepel::geom_text_repel(
+    data  = slice_head(var_df, n = 8), aes(label = gene),
+    color = "firebrick", size = 3.5, max.overlaps = 15) +
+  ggrepel::geom_text_repel(
+    data  = slice_tail(var_df, n = 5), aes(label = gene),
+    color = "grey40", size = 3.5, max.overlaps = 15) +
+  labs(title = "Gene variance across cells",
+       x = "Gene rank",
+       y = "Variance") +
+  theme_classic(base_size = 12)
+```
+
+::: callout-important
+## Discussion
+
+1.  What do you think the highly-varying genes tend to be? What about the genes that vary the least?
+2. Should we use all genes for further analysis? Why, or why not? 
+:::
+
+# Module 2
+
+## Demo 4: Need for transforming data
+
+```{r}
+#| label: demo 4
+
+#centering and scaling the dataset.
+pbmc_centered <- scale(pbmc, center = TRUE, scale = FALSE)
+pbmc_scaled <- scale(pbmc, center = TRUE, scale = TRUE)
+
+#writing a plotting function.
+make_scatter <- function(dataset, title, subtitle) {
+  tibble(x = dataset[, "LYZ"], y = dataset[, "CD3E"], cluster = metadata$cluster) %>%
+    
+    ggplot(aes(x, y, color = cluster)) +
+    geom_point(size = 3, alpha = 0.8) +
+    scale_color_brewer(palette = "Set2") +
+    labs(title = title,
+         subtitle = subtitle,
+         x = "LYZ",
+         y = "CD3E",
+         color = "Cluster") +
+    theme_classic(base_size = 10) +
+    theme(legend.position = "right")
+}
+
+#making the individual plots.
+p1 <- make_scatter(pbmc, "Raw", "Original log-normalized")
+p2 <- make_scatter(pbmc_centered, "Centered", "Subtract each gene's mean")
+p3 <- make_scatter(pbmc_scaled, "Centered + Scaled", "Mean = 0, SD = 1 per gene")
+
+#assembling figures.
+(p1 | p2 | p3) + plot_layout(guides = "collect")
+```
+
+::: callout-important
+## Discussion
+
+1. What changed in going from raw to transformed data?
+2. Did the relative position of points change?
+3. What is another method you could use to judge the spread of your dataset before and after transforming it?
+:::
+
+# Module 3
+
+## Demo 5: How many dimensions matter?
+
+```{r}
+#| label: demo 5
+
+#run PCA.
+pbmc_pca <- prcomp(pbmc, center = TRUE, scale. = TRUE)
+
+#extract variance explained, and cumulative variance
+var_exp <- pbmc_pca$sdev^2 / sum(pbmc_pca$sdev^2)
+cum_var <- cumsum(var_exp)
+
+#prepare dataframe containing information for scree plot.
+scree_df <- tibble(pc = 1:40,
+                   var_pct = var_exp[1:40] * 100,
+                   cum_pct = cum_var[1:40] * 100)
+
+#plotting.
+p_scree <- ggplot(scree_df, aes(pc, var_pct)) +
+  geom_col(fill = "skyblue3", width = 0.75) +
+  scale_x_continuous(breaks = 1:40) +
+  labs(title = "Variance explained per PC",
+       x = "Principal component", 
+       y = "% variance explained") +
+  theme_classic(base_size = 12)
+
+p_cum <- ggplot(scree_df, aes(pc, cum_pct)) +
+  geom_line(color = "skyblue3", linewidth = 1) +
+  geom_point(color = "skyblue3", size = 2) +
+  geom_hline(yintercept = 80, color = "firebrick", linetype = "dashed") +
+  scale_x_continuous(breaks = 1:40) +
+  scale_y_continuous(limits = c(0, 100)) +
+  labs(title = "Cumulative variance explained",
+       x = "Principal component", y = "Cumulative %") +
+  theme_classic(base_size = 12)
+
+p_scree / p_cum
+
+#or, you can just run the following.
+fviz_eig(pbmc_pca, barfill = "skyblue3", linecolor = "firebrick", addlabels = TRUE)
+```
+
+::: callout-important
+## Discussion
+
+1. What does % variance explained by each PC mean?
+2. Where is the elbow for our data?
+3. How much information is retained by the number of PCs chosen by examining the scree plot?
+:::
+
+## Demo 6: What drives each PC?
+
+```{r}
+#| label: demo 6
+
+#extract first 2 PCs.
+pbmc_pca_df <- tibble(PC1 = pbmc_pca$x[, 1],
+                      PC2 = pbmc_pca$x[, 2],
+                      cluster = metadata$cluster,
+                      group = metadata$group,
+                      counts = metadata$n_counts)
+
+#plot PC1 and PC2.
+ggplot(pbmc_pca_df, aes(x = PC1, y = PC2, color = cluster)) +
+  geom_point(size = 3, alpha = 0.8) +
+  scale_color_brewer(palette = "Set2") +
+  labs(title = "PCA",
+       x = sprintf("PC1  (%.1f%%)", var_exp[1]*100),
+       y = sprintf("PC2  (%.1f%%)", var_exp[2]*100)) +
+  theme_classic(base_size = 12)
+
+#gene loadings for PC1.
+as_tibble(pbmc_pca$rotation[, 1:2], rownames = "gene") %>%
+  mutate(abs_PC1 = abs(PC1)) %>%
+  arrange(desc(abs_PC1)) %>%
+  slice_head(n = 15) %>%
+  mutate(direction = if_else(PC1 > 0, "Positive", "Negative")) %>%
+  
+  ggplot(aes(x = reorder(gene, PC1), y = PC1, fill = direction)) +
+  geom_col(width = 0.7) +
+  coord_flip() +
+  scale_fill_manual(values = c("Positive" = "firebrick", "Negative" = "skyblue3")) +
+  geom_hline(yintercept = 0, color = "grey40", linewidth = 0.4) +
+  labs(title = "Top 15 gene loadings for PC1",
+       x = NULL, 
+       y = "PC1 loading", 
+       fill = NULL) +
+  theme_classic(base_size = 12) +
+  theme(legend.position = "bottom")
+```
+
+:::callout-important
+## Discussion
+
+1. Look at the top positive genes. What do you notice?
+2. What are the top negative genes?
+3. What is PC1 actually measuring biologically?
+:::
+
+## Demo 7: Why preprocessing is needed for PCA
+
+```{r}
+#| label: demo 7
+
+#PCA on non-transformed data.
+pbmc_pca_raw <- prcomp(pbmc, center = FALSE, scale. = FALSE)
+
+var_raw  <- pbmc_pca_raw$sdev^2 / sum(pbmc_pca_raw$sdev^2)
+
+#scree plot.
+fviz_eig(pbmc_pca_raw, ncp = 20, barfill = "skyblue3", linecolor = "firebrick", addlabels = TRUE) 
+
+#PC1 vs PC2.
+tibble(PC1 = pbmc_pca_raw$x[, 1], PC2 = pbmc_pca_raw$x[, 2],
+       cluster = metadata$cluster) %>%
+  ggplot(aes(x = PC1, y = PC2, color = cluster)) +
+  geom_point(size = 3, alpha = 0.8) +
+  scale_color_brewer(palette = "Set2") +
+  labs(title = "PCA: no preprocessing",
+       x = sprintf("PC1 (%.1f%%)", var_raw[1]*100),
+       y = sprintf("PC2 (%.1f%%)", var_raw[2]*100)) +
+  theme_classic(base_size = 12) 
+```
+
+:::callout-important
+## Discussion
+
+1. Compare this scatter plot with the one we made before. What differences do you notice? 
+2. What are the possible reasons for this observation? How would you check?
+:::
+
+# Module 4
+
+## Demo 8: PCA vs UMAP vs t-SNE
+
+```{r}
+#| label: demo 8
+
+#setting seed for reproducibility.
+set.seed(42)
+
+#extracting PCA scores to serve as inputs for the two methods.
+pbmc_pca_scores <- pbmc_pca$x[, 1:10]
+
+#running UMAP.
+pbmc_umap_res <- umap(pbmc_pca_scores, 
+                      n_neighbors = 15, 
+                      min_dist = 0.3,
+                      n_components = 2, 
+                      verbose = FALSE)
+
+#running t-SNE.
+pbmc_tsne_res <- Rtsne(pbmc_pca_scores, 
+                       dims = 2, 
+                       perplexity = 10,
+                       max_iter = 1000, 
+                       pca = FALSE, 
+                       verbose = FALSE)
+
+#plotting outputs.
+plot_embed <- function(x, y, title, xlab, ylab, show_legend = FALSE){
+  tibble(x = x, y = y, cluster = metadata$cluster) %>%
+    
+    ggplot(aes(x = x, y = y, color = cluster)) +
+    geom_point(size = 2.5, alpha = 0.8) +
+    scale_color_brewer(palette = "Set2") +
+    labs(title = title, 
+         x = xlab, 
+         y = ylab) +
+    theme_classic(base_size = 12) +
+    theme(legend.position = if (show_legend) "right" else "none")
+}
+
+p_pca  <- plot_embed(pbmc_pca$x[,1], pbmc_pca$x[,2], "PCA", "PC1", "PC2")
+p_umap <- plot_embed(pbmc_umap_res[,1], pbmc_umap_res[,2], "UMAP", "UMAP1", "UMAP2")
+p_tsne <- plot_embed(pbmc_tsne_res$Y[,1], pbmc_tsne_res$Y[,2], "t-SNE","tSNE1", "tSNE2", show_legend = TRUE)
+
+(p_pca | p_umap | p_tsne) 
+```
+
+:::callout-important
+## Discussion
+
+1. Why do these three plots look so different despite working on the same set of cells?
+2. UMAP and t-SNE seem to show more substructure within clusters. Does this indicate that there are potentially cell subtypes that were only revealed at this stage of analysis? 
+3. In which plot can you say something about how similar Cluster 1 and Cluster 2 are to each other? In which plots can you not?
+:::
+
+# Module 5
+
+## Demo 9: Evaluating your embedding
+
+```{r}
+#| label: demo 9
+
+#making a function to plot different attributes in the PCA plot.
+plot_pca_factors <- function(color_var, title, colorscale){
+  ggplot(pbmc_pca_df, aes(PC1, PC2, color = .data[[color_var]])) +
+    geom_point(size = 3, alpha = 0.85) +
+    colorscale +
+    labs(title = title,
+         x = sprintf("PC1 (%.1f%%)", var_exp[1]*100),
+         y = sprintf("PC2 (%.1f%%)", var_exp[2]*100)) +
+    theme_classic(base_size = 12) +
+    theme(legend.position = "right")
+}
+
+#plotting the different comparisons.
+p1 <- plot_pca_factors(color_var = "cluster", title = "Colored by cluster", colorscale = scale_color_brewer(palette = "Set2"))
+p2 <- plot_pca_factors(color_var = "group", title = "Colored by sample group", colorscale = scale_color_manual(values = c("g1" = "skyblue3", "g2" = "firebrick")))
+p3 <- plot_pca_factors(color_var = "counts", title = "Colored by library size", colorscale = scale_color_viridis_c(option = "magma"))
+
+(p1 / p2 / p3) 
+```
+
+:::callout-important
+## Discussion
+
+1. Look at the group coloring — is there a batch effect in this data?
+2. Look at the coloring by library size — Cluster 1 seems to have higher counts than Cluster 0. Does that mean the normalization failed, or could this be biological?
+3. What would be more worrying to you — if group perfectly separated the clusters, or if library size did?
+:::
+
+## Demo 10: Parameters matter
+
+```{r}
+#| label: demo 10
+
+run_umap <- function(nn){
+  set.seed(42)
+  umap(pbmc_pca_scores, 
+       n_neighbors = nn, 
+       min_dist = 0.3,
+       n_components = 2, 
+       verbose = FALSE)
+}
+
+p1 <- plot_embed(run_umap(5)[,1], run_umap(5)[,2], "n_neighbors = 5", "UMAP1", "UMAP2")
+p2 <- plot_embed(run_umap(15)[,1], run_umap(15)[,2], "n_neighbors = 15", "UMAP1", "UMAP2")
+p3 <- plot_embed(run_umap(30)[,1], run_umap(30)[,2], "n_neighbors = 30", "UMAP1", "UMAP2", show_legend = TRUE)
+
+(p1 | p2 | p3)
+```
+
+:::callout-important
+## Discussion
+
+1. The clusters look most dramatically separated in n_neighbors = 5. Does that mean it's the best parameter choice?
+2. In n_neighbors = 30, Clusters 0 and 2 have merged into a diagonal. What does that tell you about what happens when neighborhoods get too large?
+3. If you saw only the n_neighbors = 5 plot in a paper, what would you conclude about the number of cell populations? Would that conclusion hold across all three plots?
+:::
+
+# All done!
+
+Thank you for attending this workshop and following along to the very end! Please take a few minutes and fill out this [post-workshop feedback form](https://forms.gle/YvvRY3PpTcgnuvv46)!
+
+# Session info
+
+```{r}
+#| label: session info
+
+sessionInfo()
+```
+
