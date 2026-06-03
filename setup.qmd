@@ -63,7 +63,7 @@ You do not need to download this dataset ahead of class, as it can be accessed a
 
 ## 3. Code
 
-A Quarto document has been prepared and is available for participants to follow along with the workshop. It is recommended to download and work on this [participant notebook](https://github.com/sonalkumarr/linear-algebra-for-biologists/blob/main/scripts/linear_algebra_participant.qmd){download="linear_algebra_participant.qmd"}. You will be using it throughout the workshop, and you can run through it line by line with the instructor and make any notes as needed.
+A Quarto document has been prepared and is available for participants to follow along with the workshop. It is recommended to download and work on this [participant notebook](https://raw.githubusercontent.com/sonalkumarr/linear-algebra-for-biologists/main/scripts/linear_algebra_participant.qmd){download="linear_algebra_participant.qmd"}. You will be using it throughout the workshop, and you can run through it line by line with the instructor and make any notes as needed.
 
 This is all that you need to get started!
 
