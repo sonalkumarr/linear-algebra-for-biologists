@@ -69,7 +69,7 @@ To download it, click on this link to the [participant notebook](https://github.
 
 This will take you to the script on GitHub, you can download it by clicking the icon corresponding to 'Download raw file', as shown below:
 
-[Download icon for the script on GitHub](data/download.png)
+![Download icon for the script on GitHub](data/download.png)
 
 This is all that you need to get started!
 

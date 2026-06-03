@@ -25,7 +25,7 @@
     "href": "setup.html#code",
     "title": "Course setup",
     "section": "3. Code",
-    "text": "3. Code\nA Quarto document has been prepared and is available for participants to follow along with the workshop. It is recommended to download and work on this file. You will be using it throughout the workshop, and you can run through it line by line with the instructor and make any notes as needed.\nTo download it, click on this link to the participant notebook.\nThis will take you to the script on GitHub, you can download it by clicking the icon corresponding to ‘Download raw file’, as shown below:\nDownload icon for the script on GitHub\nThis is all that you need to get started!\n\n\n\n\n\n\nNote\n\n\n\nIf you’d like to follow along with the class in real time, then please plan to come with these installed/downloaded. As this is a short workshop, we will not have time to troubleshoot software installations!"
+    "text": "3. Code\nA Quarto document has been prepared and is available for participants to follow along with the workshop. It is recommended to download and work on this file. You will be using it throughout the workshop, and you can run through it line by line with the instructor and make any notes as needed.\nTo download it, click on this link to the participant notebook.\nThis will take you to the script on GitHub, you can download it by clicking the icon corresponding to ‘Download raw file’, as shown below:\n\n\n\nDownload icon for the script on GitHub\n\n\nThis is all that you need to get started!\n\n\n\n\n\n\nNote\n\n\n\nIf you’d like to follow along with the class in real time, then please plan to come with these installed/downloaded. As this is a short workshop, we will not have time to troubleshoot software installations!"
   },
   {
     "objectID": "modules/module5.html",
@@ -53,7 +53,7 @@
     "href": "instructor_info.html",
     "title": "About the instructor",
     "section": "",
-    "text": "Sonal Kumar\nI’m a PhD Candidate in the collaborative Neuroscience program offered through Tufts University and the Jackson Laboratory. My research in the Carter lab at JAX integrates multiomics data with clinical information to better understand Alzheimer’s disease-associated neurodegeneration and functional decline with aging in a non-human primate model system. Outside of my research, I’m passionate about making computational biology intuitive and accessible for students!\n\n\nContact and feedback\nIf you have any questions or would like to chat about this course, please feel free to reach out to Sonal at sonal [dot] kumar [at] jax [dot] org or Danni danielle [dot] presgraves [at] jax [dot] org. You can also raise an issue in the course GitHub repository!\nYour suggestions are always welcome! If you are taking this course in June 2026, please consider filling out this form to provide feedback that can be integrated for improving subsequent offerings for this workshop."
+    "text": "Sonal Kumar\nI’m a PhD Candidate in the collaborative Neuroscience program offered through Tufts University and the Jackson Laboratory. My research in the Carter lab at JAX integrates multiomics data with clinical information to better understand Alzheimer’s disease-associated neurodegeneration and functional decline with aging in a non-human primate model system. Outside of my research, I’m passionate about making computational biology intuitive and accessible for students!\n\n\nContact and feedback\nIf you have any questions or would like to chat about this course, please feel free to reach out to me at sonal [dot] kumar [at] jax [dot] org or Danni at danielle [dot] presgraves [at] jax [dot] org. You can also raise an issue in the course GitHub repository!\nYour suggestions are always welcome! If you are taking this course in June 2026, please consider filling out this form to provide feedback that can be integrated for improving subsequent offerings for this workshop."
   },
   {
     "objectID": "about.html",
@@ -551,5 +551,12 @@
     "title": "Linear Algebra for Biologists Workshop",
     "section": "Demo 9: Evaluating your embedding",
     "text": "Demo 9: Evaluating your embedding\n\n#making a function to plot different attributes in the PCA plot.\nplot_pca_factors &lt;- function(color_var, title, colorscale){\n  ggplot(pbmc_pca_df, aes(PC1, PC2, color = .data[[color_var]])) +\n    geom_point(size = 3, alpha = 0.85) +\n    colorscale +\n    labs(title = title,\n         x = sprintf(\"PC1 (%.1f%%)\", var_exp[1]*100),\n         y = sprintf(\"PC2 (%.1f%%)\", var_exp[2]*100)) +\n    theme_classic(base_size = 12) +\n    theme(legend.position = \"right\")\n}\n\n#plotting the different comparisons.\np1 &lt;- plot_pca_factors(color_var = \"cluster\", title = \"Colored by cluster\", colorscale = scale_color_brewer(palette = \"Set2\"))\np2 &lt;- plot_pca_factors(color_var = \"group\", title = \"Colored by sample group\", colorscale = scale_color_manual(values = c(\"g1\" = \"skyblue3\", \"g2\" = \"firebrick\")))\np3 &lt;- plot_pca_factors(color_var = \"counts\", title = \"Colored by library size\", colorscale = scale_color_viridis_c(option = \"magma\"))\n\n(p1 / p2 / p3) \n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDiscussion\n\n\n\n\nLook at the group coloring — is there a batch effect in this data?\nLook at the coloring by library size — Cluster 1 seems to have higher counts than Cluster 0. Does that mean the normalization failed, or could this be biological?\nWhat would be more worrying to you — if group perfectly separated the clusters, or if library size did?"
+  },
+  {
+    "objectID": "modules/workshop_materials.html",
+    "href": "modules/workshop_materials.html",
+    "title": "Workshop materials",
+    "section": "",
+    "text": "Slides from the workshop and recommended resources will be posted here shortly following the conclusion of the session.\nCheck back after June 4, 2026!"
   }
 ]

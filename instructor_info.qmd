@@ -1,6 +1,8 @@
 ---
 title: "About the instructor"
-format: html
+format: 
+  html:
+    toc: false
 ---
 
 ### Sonal Kumar
@@ -9,6 +11,6 @@ I'm a PhD Candidate in the collaborative Neuroscience program offered through Tu
 
 ### Contact and feedback
 
-If you have any questions or would like to chat about this course, please feel free to reach out to Sonal at **sonal \[dot\] kumar \[at\] jax \[dot\] org** or Danni **danielle \[dot\] presgraves \[at\] jax \[dot\] org.** You can also raise an issue in the [course GitHub repository](https://github.com/sonalkumarr/linear-algebra-for-biologists)!
+If you have any questions or would like to chat about this course, please feel free to reach out to me at **sonal \[dot\] kumar \[at\] jax \[dot\] org** or Danni at **danielle \[dot\] presgraves \[at\] jax \[dot\] org.** You can also raise an issue in the [course GitHub repository](https://github.com/sonalkumarr/linear-algebra-for-biologists)!
 
 Your suggestions are always welcome! If you are taking this course in June 2026, please consider filling out [this form](https://docs.google.com/forms/d/e/1FAIpQLSeNTWHSTGXuoTZcqiS0Igu-fNuMwSMeQiMiMYktBFly6CLbcg/viewform?usp=publish-editor) to provide feedback that can be integrated for improving subsequent offerings for this workshop.
