@@ -6,10 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Enter your name!">
-<meta name="dcterms.date" content="2026-04-28">
 
-<title>Linear Algebra for Biologists</title>
+<title>Linear Algebra for Biologists - Workshop materials</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,40 +19,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -138,24 +102,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-modules">    
         <li>
-    <a class="dropdown-item" href="../modules/module1.html">
- <span class="dropdown-text">Module 1: Biological data structure</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../modules/module2.html">
- <span class="dropdown-text">Module 2: Data transformations</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../modules/module3.html">
- <span class="dropdown-text">Module 3: Dimensionality reduction</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../modules/module4.html">
- <span class="dropdown-text">Module 4: Beyond the PCA</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../modules/module5.html">
- <span class="dropdown-text">Module 5: Interpretation in practice</span></a>
+    <a class="dropdown-item" href="../modules/workshop_materials.html">
+ <span class="dropdown-text">Workshop slides</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../modules/homework.html">
@@ -165,7 +113,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
   <li class="nav-item">
     <a class="nav-link" href="../instructor_info.html"> 
-<span class="menu-text">Instructor</span></a>
+<span class="menu-text">Contact</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -186,27 +134,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Linear Algebra for Biologists</h1>
-<p class="subtitle lead">Participant Workshop Notebook</p>
+<h1 class="title">Workshop materials</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Enter your name! </p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">April 28, 2026</p>
-    </div>
-  </div>
   
     
   </div>
@@ -216,13 +151,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>Testing shit</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 4</code></pre>
-</div>
-</div>
+<p>Slides from the workshop and recommended resources will be posted here shortly following the conclusion of the session.</p>
+<p>Check back after June 4, 2026!</p>
 
 
 
@@ -308,7 +238,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
+      var filterRegex = new RegExp("https:\/\/sonalkumarr\.github\.io\/linear-algebra-for-biologists\/");
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }

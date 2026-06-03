@@ -11,49 +11,35 @@
     "href": "setup.html#environment",
     "title": "Course setup",
     "section": "1. Environment",
-    "text": "1. Environment\n\nEnsure you have the latest compatible versions of RStudio and R installed for your computer. If you have not previously used R/RStudio, you can install them using the Self-Service desktop application or by reaching out directly to JAX IT.\nMake sure you have the following packages installed. Simply copy the code chunk and run it in the RStudio console:\n\n\ninstall.packages(c(\n  \"tidyverse\",\n  \"factoextra\",\n  \"Rtsne\",\n  \"uwot\"\n))\n\n\nTo make sure the packages installed correctly, go ahead and try loading them in by running the following in the console:\n\n\nlibrary(tidyverse)\nlibrary(factoextra)\nlibrary(Rtsne)\nlibrary(uwot)"
+    "text": "1. Environment\n\nEnsure you have the latest compatible versions of RStudio and R installed for your computer. If you have not previously used R/RStudio, you can install them using the Self-Service desktop application or by reaching out directly to JAX IT.\nMake sure you have the following packages installed. Simply copy the code chunk and run it in the RStudio console:\n\n\ninstall.packages(c(\n  \"tidyverse\",\n  \"factoextra\",\n  \"Rtsne\",\n  \"uwot\",\n  \"patchwork\",\n  \"Seurat\"\n))\n\nIf Seurat doesn’t install correctly, you can install it through BioConductor as follows:\n\nif (!requireNamespace(\"BiocManager\", quietly = TRUE))\n    install.packages(\"BiocManager\")\nBiocManager::install(\"Seurat\")\n\nThat should do the trick!\n\nTo make sure the packages installed correctly, go ahead and try loading them in by running the following in the console:\n\n\nlibrary(tidyverse)\nlibrary(factoextra)\nlibrary(Rtsne)\nlibrary(uwot)\nlibrary(patchwork)\nlibrary(Seurat)"
   },
   {
     "objectID": "setup.html#data",
     "href": "setup.html#data",
     "title": "Course setup",
     "section": "2. Data",
-    "text": "2. Data\nWe will be using the same dataset throughout the course. The original study sequenced 2,700 peripheral blood mononuclear cells (PBMCs) from a healthy donor, which is freely available as the PBMC3k dataset from 10X Genomics.\nWe have generated a subset of this dataset for demonstration in this workshop. Briefly, we did xyz to the data. As the focus of the course is not on analyzing single cell RNASeq in R using Seurat, we’ve tried to retain a high-dimensional dataset that can still be analyzed easily locally on personal computers. More details on data preprocessing are given in this script.\nClicking on this link should start the download of the .rds file. This is a file type that allows reading in R objects directly, and are often better for reproducibility. Once downloaded, you can load your data in the workspace like so:\n\n#load file in your workspace.\ndata &lt;- readRDS(\"pbmc3k_subset.rds\") #remember to confirm the path to your file.\n\n#data is a list of many files, and individual files can be accessed like so:\npbmc3k &lt;- data$readcounts\nmetadata &lt;- data$metadata"
+    "text": "2. Data\nWe will be using the same dataset throughout the course. The original study sequenced 2,700 peripheral blood mononuclear cells (PBMCs) from a healthy donor, which is freely available as the PBMC3k dataset from 10X Genomics.\nA light-weight subset of this dataset is available as pbmc_small, which contains expression data for 200+ genes measured for 80 cells. utilizing a subset of the data helps ensure that all code can be easily and quickly run on most participants’ systems locally.\nYou do not need to download this dataset ahead of class, as it can be accessed after loading the Seurat package in our session."
   },
   {
     "objectID": "setup.html#code",
     "href": "setup.html#code",
     "title": "Course setup",
     "section": "3. Code",
-    "text": "3. Code\nWhile individual course modules will be populated with relevant code that can be followed to reproduce results, it is recommended to download and work on this Quarto document for course participants. You will be using it throughout the workshop, and you can run through it line by line with the instructor and make any notes, if needed.\nThis is all that you need to get started!\n\n\n\n\n\n\nNote\n\n\n\nIf you’d like to follow along with the class in real time, then please plan to come with these installed/downloaded. As this is a short workshop, we will not have time to troubleshoot software installations!"
+    "text": "3. Code\nA Quarto document has been prepared and is available for participants to follow along with the workshop. It is recommended to download and work on this file. You will be using it throughout the workshop, and you can run through it line by line with the instructor and make any notes as needed.\nTo download it, click on this link to the participant notebook.\nThis will take you to the script on GitHub, you can download it by clicking the icon corresponding to ‘Download raw file’, as shown below:\n\n\n\nDownload icon for the script on GitHub\n\n\nThis is all that you need to get started!\n\n\n\n\n\n\nNote\n\n\n\nIf you’d like to follow along with the class in real time, then please plan to come with these installed/downloaded. As this is a short workshop, we will not have time to troubleshoot software installations!"
   },
   {
-    "objectID": "modules/module5.html",
-    "href": "modules/module5.html",
-    "title": "Module 5: Practical interpretation",
+    "objectID": "modules/workshop_materials.html",
+    "href": "modules/workshop_materials.html",
+    "title": "Workshop materials",
     "section": "",
-    "text": "Dimensionality reduction aids visualizations and insights into your data, but interpreting them correctly requires careful thought. This module focuses on how to critically evaluate results and avoid common pitfalls.\nWhat you’ll explore:\n\nHow to interpret clustering and embedding plots\n\nHow preprocessing choices influence results\n\nHow to identify potential artifacts such as batch effects\n\nWhat questions to ask when evaluating biological data\n\nThe full content for this module will be released on the morning of the workshop!"
-  },
-  {
-    "objectID": "modules/module3.html",
-    "href": "modules/module3.html",
-    "title": "Module 3: Need for dimensionality reduction",
-    "section": "",
-    "text": "Biological datasets often contain thousands of features, making them difficult to visualize and interpret directly. Dimensionality reduction provides a way to summarize this information while preserving important patterns.\nWhat you’ll explore:\n\nWhy dimensionality reduction is needed\n\nHow Principal Component Analysis (PCA) summarizes variation in data\n\nHow to interpret principal components in a biological context\n\nHow much variation is captured by each component\n\nThe full content for this module will be released on the morning of the workshop!"
-  },
-  {
-    "objectID": "modules/module1.html",
-    "href": "modules/module1.html",
-    "title": "Module 1: Understanding biological data structure",
-    "section": "",
-    "text": "Biological datasets are often high-dimensional and can be represented using familiar mathematical structures such as vectors and matrices. In this module, we will focus on how to interpret biological data in this framework and how to compare samples based on their features.\nWhat you’ll explore:\n\nWhat rows and columns represent in a biological dataset\n\nHow to think of samples (cells) as vectors\n\nHow similarity and distance between samples are defined\n\nHow clustering methods group similar samples\n\nThe full content for this module will be released on the morning of the workshop!"
+    "text": "Slides from the workshop and recommended resources will be posted here shortly following the conclusion of the session.\nCheck back after June 4, 2026!"
   },
   {
     "objectID": "instructor_info.html",
     "href": "instructor_info.html",
     "title": "About the instructor",
     "section": "",
-    "text": "Sonal Kumar\nI’m a PhD Candidate in the collaborative Neuroscience program offered through Tufts University and the Jackson Laboratory. My research in the Carter lab at JAX integrates multiomics data with clinical information to better understand Alzheimer’s disease-associated neurodegeneration and functional decline with aging in a non-human primate model system. Outside of my research, I’m passionate about making computational biology intuitive and accessible for students!\n\n\nContact and feedback\nIf you have any questions or would like to chat about this course, please feel free to reach out at sonal [dot] kumar [at] jax [dot] org or raise an issue in the course GitHub repository.\nYour suggestions are always welcome! If you are taking this course in May 2026, please consider filling out this form to provide feedback that can be integrated for improving subsequent offerings for this workshop."
+    "text": "Sonal Kumar\nI’m a PhD Candidate in the collaborative Neuroscience program offered through Tufts University and the Jackson Laboratory. My research in the Carter lab at JAX integrates multiomics data with clinical information to better understand Alzheimer’s disease-associated neurodegeneration and functional decline with aging in a non-human primate model system. Outside of my research, I’m passionate about making computational biology intuitive and accessible for students!\n\n\nContact and feedback\nIf you have any questions or would like to chat about this course, please feel free to reach out to me at sonal [dot] kumar [at] jax [dot] org or Danni at danielle [dot] presgraves [at] jax [dot] org. You can also raise an issue in the course GitHub repository!\nYour suggestions are always welcome! If you are taking this course in June 2026, please consider filling out this form to provide feedback that can be integrated for improving subsequent offerings for this workshop."
   },
   {
     "objectID": "about.html",
@@ -77,297 +63,87 @@
     "text": "You’ve now gone through the entire course, congrats! If you’d like to further refine your understanding, complete the activities given here as homework.\nThis optional exercise allows you to apply the concepts from the workshop to a new dataset.\nWhat you’ll explore:\n\nHow to approach a dataset from start to finish\n\nHow preprocessing affects results\n\nHow to choose appropriate methods\n\nHow to interpret outputs in a biological context\n\nWhat to do now:\n\nNo preparation required\n\nThis activity can be completed during or after the workshop\n\nDetails for this exercise will be shared during the workshop!"
   },
   {
-    "objectID": "modules/module2.html",
-    "href": "modules/module2.html",
-    "title": "Module 2: Data transformations",
+    "objectID": "scripts/linear_algebra_participant.html",
+    "href": "scripts/linear_algebra_participant.html",
+    "title": "Linear Algebra for Biologists Workshop",
     "section": "",
-    "text": "Before analyzing biological data, it is often necessary to preprocess and transform it. These steps can significantly change how the data is represented and how patterns appear.\nWhat you’ll explore:\n\nWhy preprocessing is necessary for biological data\n\nThe effect of normalization, centering, and scaling\n\nHow transformations change the structure of the data\n\nHow preprocessing impacts downstream analyses\n\nThe full content for this module will be released on the morning of the workshop!"
+    "text": "How to use this notebook\n\n\n\nThis notebook is for you, the participant! Each demo is a self-contained code chunk, so all you have to do is run it. Feel free to take notes and add comments throughout the code, the idea is to have this document serve as a reference for you!"
   },
   {
-    "objectID": "modules/module4.html",
-    "href": "modules/module4.html",
-    "title": "Module 4: Expanding beyond the PCA",
-    "section": "",
-    "text": "While PCA is widely used, it may not always capture complex structure in high-dimensional data. Other methods, frequently using non-linear modeling, can highlight different aspects of the data.\nWhat you’ll explore:\n\nHow PCA compares to methods like UMAP and t-SNE\n\nThe difference between global and local structure\n\nHow different methods represent patterns in the data\n\nWhen different dimensionality reduction approaches are useful\n\nThe full content for this module will be released on the morning of the workshop!"
+    "objectID": "scripts/linear_algebra_participant.html#setup",
+    "href": "scripts/linear_algebra_participant.html#setup",
+    "title": "Linear Algebra for Biologists Workshop",
+    "section": "Setup",
+    "text": "Setup\nRun this chunk to set things up for the rest of the workshop. This should take less than 5 mins to finish running.\n\n#load packages.\nlibrary(tidyverse)\nlibrary(factoextra)\nlibrary(Rtsne)\nlibrary(uwot)\nlibrary(patchwork)\nlibrary(Seurat)\n\n#load dataset.\ndata(\"pbmc_small\") #small single cell expression matrix, already log-normalized for our use.\n\n#extract dataset we will work with, and convert to cells x genes format.\npbmc &lt;- t(as.matrix(pbmc_small[[\"RNA\"]]$data))\n\n#extract metadata.\nmetadata &lt;- pbmc_small@meta.data %&gt;%\n  as_tibble(rownames = \"cell_id\") %&gt;%\n  select(cell_id,\n         cluster = RNA_snn_res.1,\n         group = groups,\n         n_counts = nCount_RNA,\n         n_genes = nFeature_RNA) %&gt;%\n  mutate(cluster = paste0(\"Cluster \", cluster))\n\n#checking:\ncat(\"=== Ready ===\\n\")\n\n=== Ready ===\n\ncat(\"  Cells:\", nrow(pbmc), \"\\n\")\n\n  Cells: 80 \n\ncat(\"  Genes:\", ncol(pbmc), \"\\n\")\n\n  Genes: 230 \n\ncat(\"  Clusters:\", paste(sort(unique(metadata$cluster)), collapse = \", \"), \"\\n\")\n\n  Clusters: Cluster 0, Cluster 1, Cluster 2 \n\ncat(\"  Groups:  \", paste(unique(metadata$group),   collapse = \", \"), \"\\n\")\n\n  Groups:   g2, g1 \n\n\n\n\n\n\n\n\nExpected output\n\n\n\nCells: 80   Genes: 230\nIf you see an error, make sure you have all packages, namely Seurat, tidyverse, factoextra, Rtsne, uwot, and patchwork correctly installed. Follow instructions given on the Setup page of the course website to do so if you haven’t yet."
   },
   {
-    "objectID": "scripts/instructor_workshop.html",
-    "href": "scripts/instructor_workshop.html",
-    "title": "Linear Algebra for Biologists",
-    "section": "",
-    "text": "This notebook is designed to accompany the workshop content.\nDo not spend the full workshop walking through every line of code.\nSuggested use:\n\nRun selected chunks live.\nUse plots as teaching anchors.\nPause often for interpretation.\nSkip optional chunks if running behind.\n\nMain teaching story:\n\nBiological data can be represented as a matrix.\nOnce data is a matrix, we can compare samples, transform the data, reduce dimensionality, and visualize structure.\n\nDataset: PBMC3k single-cell RNA-seq data.\nWe will treat:\n\ncells as observations/samples\ngenes as features/variables\nexpression values as measurements"
+    "objectID": "scripts/linear_algebra_participant.html#demo-1-your-data-is-a-matrix",
+    "href": "scripts/linear_algebra_participant.html#demo-1-your-data-is-a-matrix",
+    "title": "Linear Algebra for Biologists Workshop",
+    "section": "Demo 1: Your data is a matrix",
+    "text": "Demo 1: Your data is a matrix\n\n#check matrix dimensions.\ndim(pbmc)\n\n[1]  80 230\n\n#print 6 cells and 8 genes.\npbmc[1:6, 1:8]\n\n               MS4A1    CD79B CD79A  HLA-DRA TCL1A HLA-DQB1 HVCN1 HLA-DMB\nATGCCAGAACGACT     0 4.968821     0 0.000000     0 4.968821     0       0\nCATGGCCTGTGCAT     0 0.000000     0 4.776153     0 0.000000     0       0\nGAACCTGATGAACC     0 0.000000     0 0.000000     0 0.000000     0       0\nTGACTGGATTCTCA     0 0.000000     0 0.000000     0 0.000000     0       0\nAGTCAGACTGCACA     0 0.000000     0 4.074201     0 0.000000     0       0\nTCTGATACACGTGT     0 0.000000     0 4.968821     0 0.000000     0       0\n\n\n\n\n\n\n\n\nDiscussion\n\n\n\nHow many genes and cells are captured in this dataset? How many dimensions does your data have?\n\n\n\n#cells with expression for two genes.\ntibble(x = pbmc[, \"MS4A1\"],\n       y = pbmc[, \"CD14\"],\n  cluster = metadata$cluster) %&gt;%\n  ggplot(aes(x, y, color = cluster)) +\n  geom_point(size = 3, alpha = 0.8) +\n  scale_color_brewer(palette = \"Set2\") +\n  labs(title = \"Cells in 2D gene space\",\n       x = \"MS4A1 expression\",\n       y = \"CD14 expression\",\n       color = \"Cluster\") +\n  theme_classic(base_size = 12)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDiscussion\n\n\n\n\nWhat does each point on the plot represent?\nHow many axes would you need to show all information with respect to a cell?\nWhat do you take away from this plot? What can you comment about the cell clusters?"
   },
   {
-    "objectID": "scripts/instructor_workshop.html#goal",
-    "href": "scripts/instructor_workshop.html#goal",
-    "title": "Linear Algebra for Biologists",
-    "section": "Goal",
-    "text": "Goal\nBy the end of this module, participants should understand:\n\nbiological data as a matrix\nrows and columns as observations and features\ncells as vectors\nsimilarity and distance between cells"
+    "objectID": "scripts/linear_algebra_participant.html#demo-2-distance-and-dimensionality",
+    "href": "scripts/linear_algebra_participant.html#demo-2-distance-and-dimensionality",
+    "title": "Linear Algebra for Biologists Workshop",
+    "section": "Demo 2: Distance and dimensionality",
+    "text": "Demo 2: Distance and dimensionality\n\n#calculate distance matrix.\ndist_pbmc &lt;- as.matrix(dist(x = pbmc, method = \"euclidean\"))\n\n#selecting cells in a cluster-specific way.\nsame_idx &lt;- which(metadata$cluster == metadata$cluster[1])[1:2]\ndiff_idx &lt;- which(metadata$cluster != metadata$cluster[1])[1]\n\ncat(\"Same cluster: \", round(dist_pbmc[same_idx[1], same_idx[2]], 2), \"\\n\")\n\nSame cluster:  39.17 \n\ncat(\"Different cluster: \", round(dist_pbmc[same_idx[1], diff_idx], 2), \"\\n\\n\")\n\nDifferent cluster:  41.93 \n\n#calculate average pairwise distance as dimensions increase.\nset.seed(42)\n\ndims &lt;- c(2, 5, 10, 30, 100, 230)\ndata.frame(dimensions = dims,\n           avg_distance = round(sapply(dims, function(n_dims) mean(dist(pbmc[1:10, 1:n_dims]))), 2)\n)\n\n  dimensions avg_distance\n1          2         1.71\n2          5         3.78\n3         10         4.43\n4         30         9.10\n5        100        26.36\n6        230        35.15\n\n\n\n\n\n\n\n\nDiscussion\n\n\n\n\nWhat can you say about the cells that were used for calculating average distance with increasing dimensions?\nWhat do you think will happen with multiple cell identities, and several thousands of measured genes?"
   },
   {
-    "objectID": "scripts/instructor_workshop.html#load-dataset",
-    "href": "scripts/instructor_workshop.html#load-dataset",
-    "title": "Linear Algebra for Biologists",
-    "section": "Load dataset",
-    "text": "Load dataset\n\noptions(timeout = 300) # Increases timeout to 5 minutes\nSeuratData::InstallData(\"pbmc3k\")\n\n\nSeuratData::InstallData(\"pbmc3k\")\npbmc &lt;- SeuratData::LoadData(\"pbmc3k\")\n\nInstructor note:\nUse a preprocessed PBMC3k object for the workshop. Avoid making participants run the full Seurat preprocessing workflow unless this is explicitly part of the course.\n\npbmc &lt;- readRDS(\"data/pbmc3k_clean.rds\")\npbmc"
+    "objectID": "scripts/linear_algebra_participant.html#demo-3-which-genes-are-informative",
+    "href": "scripts/linear_algebra_participant.html#demo-3-which-genes-are-informative",
+    "title": "Linear Algebra for Biologists Workshop",
+    "section": "Demo 3: Which genes are informative?",
+    "text": "Demo 3: Which genes are informative?\n\n#calculating variance for each gene.\ngene_vars &lt;- sort(apply(pbmc, 2, var), decreasing = TRUE)\n\nvar_df &lt;- tibble(rank = seq_along(gene_vars),\n                 variance = gene_vars,\n                 gene = names(gene_vars))\n\n#plotting genes ranked by variance.\nggplot(var_df, aes(x = rank, y = variance)) +\n  geom_line(color = \"skyblue3\", linewidth = 0.9) +\n  geom_point(data = slice_head(var_df, n = 8), color = \"firebrick\", size = 1.2) +\n  geom_point(data = slice_tail(var_df, n = 5), color = \"grey40\", size = 1.2) +\n  ggrepel::geom_text_repel(\n    data  = slice_head(var_df, n = 8), aes(label = gene),\n    color = \"firebrick\", size = 3.5, max.overlaps = 15) +\n  ggrepel::geom_text_repel(\n    data  = slice_tail(var_df, n = 5), aes(label = gene),\n    color = \"grey40\", size = 3.5, max.overlaps = 15) +\n  labs(title = \"Gene variance across cells\",\n       x = \"Gene rank\",\n       y = \"Variance\") +\n  theme_classic(base_size = 12)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDiscussion\n\n\n\n\nWhat do you think the highly-varying genes tend to be? What about the genes that vary the least?\nShould we use all genes for further analysis? Why, or why not?"
   },
   {
-    "objectID": "scripts/instructor_workshop.html#inspect-metadata",
-    "href": "scripts/instructor_workshop.html#inspect-metadata",
-    "title": "Linear Algebra for Biologists",
-    "section": "Inspect metadata",
-    "text": "Inspect metadata\n\nhead(pbmc@meta.data)\n\n\ntable(pbmc$seurat_annotations)\n\nInstructor pause:\nAsk:\n\nWhat does one row in the metadata represent?\nWhat kinds of information do we have about each cell?\nWhich variables are biological labels?\nWhich variables might be technical?"
+    "objectID": "scripts/linear_algebra_participant.html#demo-4-need-for-transforming-data",
+    "href": "scripts/linear_algebra_participant.html#demo-4-need-for-transforming-data",
+    "title": "Linear Algebra for Biologists Workshop",
+    "section": "Demo 4: Need for transforming data",
+    "text": "Demo 4: Need for transforming data\n\n#centering and scaling the dataset.\npbmc_centered &lt;- scale(pbmc, center = TRUE, scale = FALSE)\npbmc_scaled &lt;- scale(pbmc, center = TRUE, scale = TRUE)\n\n#writing a plotting function.\nmake_scatter &lt;- function(dataset, title, subtitle) {\n  tibble(x = dataset[, \"LYZ\"], y = dataset[, \"CD3E\"], cluster = metadata$cluster) %&gt;%\n    \n    ggplot(aes(x, y, color = cluster)) +\n    geom_point(size = 3, alpha = 0.8) +\n    scale_color_brewer(palette = \"Set2\") +\n    labs(title = title,\n         subtitle = subtitle,\n         x = \"LYZ\",\n         y = \"CD3E\",\n         color = \"Cluster\") +\n    theme_classic(base_size = 10) +\n    theme(legend.position = \"right\")\n}\n\n#making the individual plots.\np1 &lt;- make_scatter(pbmc, \"Raw\", \"Original log-normalized\")\np2 &lt;- make_scatter(pbmc_centered, \"Centered\", \"Subtract each gene's mean\")\np3 &lt;- make_scatter(pbmc_scaled, \"Centered + Scaled\", \"Mean = 0, SD = 1 per gene\")\n\n#assembling figures.\n(p1 | p2 | p3) + plot_layout(guides = \"collect\")\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDiscussion\n\n\n\n\nWhat changed in going from raw to transformed data?\nDid the relative position of points change?\nWhat is another method you could use to judge the spread of your dataset before and after transforming it?"
   },
   {
-    "objectID": "scripts/instructor_workshop.html#extract-expression-matrix",
-    "href": "scripts/instructor_workshop.html#extract-expression-matrix",
-    "title": "Linear Algebra for Biologists",
-    "section": "Extract expression matrix",
-    "text": "Extract expression matrix\n\nexpr &lt;- GetAssayData(pbmc, assay = \"RNA\", layer = \"data\")\nexpr[1:5, 1:5]\n\n\ndim(expr)\n\nInstructor note:\nSeurat stores this matrix as:\ngenes × cells\nFor most of our linear algebra intuition, it is easier to think in terms of:\ncells × genes\nSo we transpose the matrix.\n\nexpr_t &lt;- t(as.matrix(expr))\ndim(expr_t)\n\nInstructor pause:\nAsk:\n\nWhat does one row represent now?\nWhat does one column represent now?\nWhat is one cell represented as mathematically?\n\nAnswer:\nEach cell is a vector of gene expression values."
+    "objectID": "scripts/linear_algebra_participant.html#demo-5-how-many-dimensions-matter",
+    "href": "scripts/linear_algebra_participant.html#demo-5-how-many-dimensions-matter",
+    "title": "Linear Algebra for Biologists Workshop",
+    "section": "Demo 5: How many dimensions matter?",
+    "text": "Demo 5: How many dimensions matter?\n\n#run PCA.\npbmc_pca &lt;- prcomp(pbmc, center = TRUE, scale. = TRUE)\n\n#extract variance explained, and cumulative variance\nvar_exp &lt;- pbmc_pca$sdev^2 / sum(pbmc_pca$sdev^2)\ncum_var &lt;- cumsum(var_exp)\n\n#prepare dataframe containing information for scree plot.\nscree_df &lt;- tibble(pc = 1:40,\n                   var_pct = var_exp[1:40] * 100,\n                   cum_pct = cum_var[1:40] * 100)\n\n#plotting.\np_scree &lt;- ggplot(scree_df, aes(pc, var_pct)) +\n  geom_col(fill = \"skyblue3\", width = 0.75) +\n  scale_x_continuous(breaks = 1:40) +\n  labs(title = \"Variance explained per PC\",\n       x = \"Principal component\", \n       y = \"% variance explained\") +\n  theme_classic(base_size = 12)\n\np_cum &lt;- ggplot(scree_df, aes(pc, cum_pct)) +\n  geom_line(color = \"skyblue3\", linewidth = 1) +\n  geom_point(color = \"skyblue3\", size = 2) +\n  geom_hline(yintercept = 80, color = \"firebrick\", linetype = \"dashed\") +\n  scale_x_continuous(breaks = 1:40) +\n  scale_y_continuous(limits = c(0, 100)) +\n  labs(title = \"Cumulative variance explained\",\n       x = \"Principal component\", y = \"Cumulative %\") +\n  theme_classic(base_size = 12)\n\np_scree / p_cum\n\n\n\n\n\n\n\n#or, you can just run the following.\nfviz_eig(pbmc_pca, barfill = \"skyblue3\", linecolor = \"firebrick\", addlabels = TRUE)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDiscussion\n\n\n\n\nWhat does % variance explained by each PC mean?\nWhere is the elbow for our data?\nHow much information is retained by the number of PCs chosen by examining the scree plot?"
   },
   {
-    "objectID": "scripts/instructor_workshop.html#select-variable-genes",
-    "href": "scripts/instructor_workshop.html#select-variable-genes",
-    "title": "Linear Algebra for Biologists",
-    "section": "Select variable genes",
-    "text": "Select variable genes\nInstructor note:\nWe do not need every gene for teaching. Using all genes slows things down and adds noise.\n\nvariable_genes &lt;- VariableFeaturePlot(pbmc)[1:1000]\nexpr_var &lt;- expr_t[, variable_genes]\n\ndim(expr_var)"
+    "objectID": "scripts/linear_algebra_participant.html#demo-6-what-drives-each-pc",
+    "href": "scripts/linear_algebra_participant.html#demo-6-what-drives-each-pc",
+    "title": "Linear Algebra for Biologists Workshop",
+    "section": "Demo 6: What drives each PC?",
+    "text": "Demo 6: What drives each PC?\n\n#extract first 2 PCs.\npbmc_pca_df &lt;- tibble(PC1 = pbmc_pca$x[, 1],\n                      PC2 = pbmc_pca$x[, 2],\n                      cluster = metadata$cluster,\n                      group = metadata$group,\n                      counts = metadata$n_counts)\n\n#plot PC1 and PC2.\nggplot(pbmc_pca_df, aes(x = PC1, y = PC2, color = cluster)) +\n  geom_point(size = 3, alpha = 0.8) +\n  scale_color_brewer(palette = \"Set2\") +\n  labs(title = \"PCA\",\n       x = sprintf(\"PC1  (%.1f%%)\", var_exp[1]*100),\n       y = sprintf(\"PC2  (%.1f%%)\", var_exp[2]*100)) +\n  theme_classic(base_size = 12)\n\n\n\n\n\n\n\n#gene loadings for PC1.\nas_tibble(pbmc_pca$rotation[, 1:2], rownames = \"gene\") %&gt;%\n  mutate(abs_PC1 = abs(PC1)) %&gt;%\n  arrange(desc(abs_PC1)) %&gt;%\n  slice_head(n = 15) %&gt;%\n  mutate(direction = if_else(PC1 &gt; 0, \"Positive\", \"Negative\")) %&gt;%\n  \n  ggplot(aes(x = reorder(gene, PC1), y = PC1, fill = direction)) +\n  geom_col(width = 0.7) +\n  coord_flip() +\n  scale_fill_manual(values = c(\"Positive\" = \"firebrick\", \"Negative\" = \"skyblue3\")) +\n  geom_hline(yintercept = 0, color = \"grey40\", linewidth = 0.4) +\n  labs(title = \"Top 15 gene loadings for PC1\",\n       x = NULL, \n       y = \"PC1 loading\", \n       fill = NULL) +\n  theme_classic(base_size = 12) +\n  theme(legend.position = \"bottom\")\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDiscussion\n\n\n\n\nLook at the top positive genes. What do you notice?\nWhat are the top negative genes?\nWhat is PC1 actually measuring biologically?"
   },
   {
-    "objectID": "scripts/instructor_workshop.html#visualize-a-small-part-of-the-matrix",
-    "href": "scripts/instructor_workshop.html#visualize-a-small-part-of-the-matrix",
-    "title": "Linear Algebra for Biologists",
-    "section": "Visualize a small part of the matrix",
-    "text": "Visualize a small part of the matrix\n\nexpr_small &lt;- expr_var[1:10, 1:10]\nexpr_small\n\nInstructor pause:\nAsk:\n\nIs this a small matrix or a slice of a larger matrix?\nWhat would a row vector mean?\nWhat would a column vector mean?"
+    "objectID": "scripts/linear_algebra_participant.html#demo-7-why-preprocessing-is-needed-for-pca",
+    "href": "scripts/linear_algebra_participant.html#demo-7-why-preprocessing-is-needed-for-pca",
+    "title": "Linear Algebra for Biologists Workshop",
+    "section": "Demo 7: Why preprocessing is needed for PCA",
+    "text": "Demo 7: Why preprocessing is needed for PCA\n\n#PCA on non-transformed data.\npbmc_pca_raw &lt;- prcomp(pbmc, center = FALSE, scale. = FALSE)\n\nvar_raw  &lt;- pbmc_pca_raw$sdev^2 / sum(pbmc_pca_raw$sdev^2)\n\n#scree plot.\nfviz_eig(pbmc_pca_raw, ncp = 20, barfill = \"skyblue3\", linecolor = \"firebrick\", addlabels = TRUE) \n\n\n\n\n\n\n\n#PC1 vs PC2.\ntibble(PC1 = pbmc_pca_raw$x[, 1], PC2 = pbmc_pca_raw$x[, 2],\n       cluster = metadata$cluster) %&gt;%\n  ggplot(aes(x = PC1, y = PC2, color = cluster)) +\n  geom_point(size = 3, alpha = 0.8) +\n  scale_color_brewer(palette = \"Set2\") +\n  labs(title = \"PCA: no preprocessing\",\n       x = sprintf(\"PC1 (%.1f%%)\", var_raw[1]*100),\n       y = sprintf(\"PC2 (%.1f%%)\", var_raw[2]*100)) +\n  theme_classic(base_size = 12) \n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDiscussion\n\n\n\n\nCompare this scatter plot with the one we made before. What differences do you notice?\nWhat are the possible reasons for this observation? How would you check?"
   },
   {
-    "objectID": "scripts/instructor_workshop.html#look-at-expression-distribution",
-    "href": "scripts/instructor_workshop.html#look-at-expression-distribution",
-    "title": "Linear Algebra for Biologists",
-    "section": "Look at expression distribution",
-    "text": "Look at expression distribution\n\nexpr_long_sample &lt;- expr_var[\n  sample(rownames(expr_var), 300),\n  sample(colnames(expr_var), 50)\n] %&gt;%\n  as.data.frame() %&gt;%\n  rownames_to_column(\"cell\") %&gt;%\n  pivot_longer(-cell, names_to = \"gene\", values_to = \"expression\")\n\nggplot(expr_long_sample, aes(x = expression)) +\n  geom_histogram(bins = 50) +\n  labs(\n    title = \"Distribution of expression values\",\n    x = \"Log-normalized expression\",\n    y = \"Count\"\n  )\n\nInstructor pause:\nAsk:\n\nAre most values high or low?\nWhat does this suggest about biological data?\nIs this matrix dense or sparse-ish?"
+    "objectID": "scripts/linear_algebra_participant.html#demo-8-pca-vs-umap-vs-t-sne",
+    "href": "scripts/linear_algebra_participant.html#demo-8-pca-vs-umap-vs-t-sne",
+    "title": "Linear Algebra for Biologists Workshop",
+    "section": "Demo 8: PCA vs UMAP vs t-SNE",
+    "text": "Demo 8: PCA vs UMAP vs t-SNE\n\n#setting seed for reproducibility.\nset.seed(42)\n\n#extracting PCA scores to serve as inputs for the two methods.\npbmc_pca_scores &lt;- pbmc_pca$x[, 1:10]\n\n#running UMAP.\npbmc_umap_res &lt;- umap(pbmc_pca_scores, \n                      n_neighbors = 15, \n                      min_dist = 0.3,\n                      n_components = 2, \n                      verbose = FALSE)\n\n#running t-SNE.\npbmc_tsne_res &lt;- Rtsne(pbmc_pca_scores, \n                       dims = 2, \n                       perplexity = 10,\n                       max_iter = 1000, \n                       pca = FALSE, \n                       verbose = FALSE)\n\n#plotting outputs.\nplot_embed &lt;- function(x, y, title, xlab, ylab, show_legend = FALSE){\n  tibble(x = x, y = y, cluster = metadata$cluster) %&gt;%\n    \n    ggplot(aes(x = x, y = y, color = cluster)) +\n    geom_point(size = 2.5, alpha = 0.8) +\n    scale_color_brewer(palette = \"Set2\") +\n    labs(title = title, \n         x = xlab, \n         y = ylab) +\n    theme_classic(base_size = 12) +\n    theme(legend.position = if (show_legend) \"right\" else \"none\")\n}\n\np_pca  &lt;- plot_embed(pbmc_pca$x[,1], pbmc_pca$x[,2], \"PCA\", \"PC1\", \"PC2\")\np_umap &lt;- plot_embed(pbmc_umap_res[,1], pbmc_umap_res[,2], \"UMAP\", \"UMAP1\", \"UMAP2\")\np_tsne &lt;- plot_embed(pbmc_tsne_res$Y[,1], pbmc_tsne_res$Y[,2], \"t-SNE\",\"tSNE1\", \"tSNE2\", show_legend = TRUE)\n\n(p_pca | p_umap | p_tsne) \n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDiscussion\n\n\n\n\nWhy do these three plots look so different despite working on the same set of cells?\nUMAP and t-SNE seem to show more substructure within clusters. Does this indicate that there are potentially cell subtypes that were only revealed at this stage of analysis?\nIn which plot can you say something about how similar Cluster 1 and Cluster 2 are to each other? In which plots can you not?"
   },
   {
-    "objectID": "scripts/instructor_workshop.html#subset-cells-for-distance-calculations",
-    "href": "scripts/instructor_workshop.html#subset-cells-for-distance-calculations",
-    "title": "Linear Algebra for Biologists",
-    "section": "Subset cells for distance calculations",
-    "text": "Subset cells for distance calculations\nInstructor note:\nPairwise distances across all cells can be slow and visually overwhelming. Use a subset.\n\ncell_subset &lt;- sample(rownames(expr_var), 250)\nexpr_subset &lt;- expr_var[cell_subset, ]"
+    "objectID": "scripts/linear_algebra_participant.html#demo-9-evaluating-your-embedding",
+    "href": "scripts/linear_algebra_participant.html#demo-9-evaluating-your-embedding",
+    "title": "Linear Algebra for Biologists Workshop",
+    "section": "Demo 9: Evaluating your embedding",
+    "text": "Demo 9: Evaluating your embedding\n\n#making a function to plot different attributes in the PCA plot.\nplot_pca_factors &lt;- function(color_var, title, colorscale){\n  ggplot(pbmc_pca_df, aes(PC1, PC2, color = .data[[color_var]])) +\n    geom_point(size = 3, alpha = 0.85) +\n    colorscale +\n    labs(title = title,\n         x = sprintf(\"PC1 (%.1f%%)\", var_exp[1]*100),\n         y = sprintf(\"PC2 (%.1f%%)\", var_exp[2]*100)) +\n    theme_classic(base_size = 12) +\n    theme(legend.position = \"right\")\n}\n\n#plotting the different comparisons.\np1 &lt;- plot_pca_factors(color_var = \"cluster\", title = \"Colored by cluster\", colorscale = scale_color_brewer(palette = \"Set2\"))\np2 &lt;- plot_pca_factors(color_var = \"group\", title = \"Colored by sample group\", colorscale = scale_color_manual(values = c(\"g1\" = \"skyblue3\", \"g2\" = \"firebrick\")))\np3 &lt;- plot_pca_factors(color_var = \"counts\", title = \"Colored by library size\", colorscale = scale_color_viridis_c(option = \"magma\"))\n\n(p1 / p2 / p3) \n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDiscussion\n\n\n\n\nLook at the group coloring — is there a batch effect in this data?\nLook at the coloring by library size — Cluster 1 seems to have higher counts than Cluster 0. Does that mean the normalization failed, or could this be biological?\nWhat would be more worrying to you — if group perfectly separated the clusters, or if library size did?"
   },
   {
-    "objectID": "scripts/instructor_workshop.html#compute-distances-between-cells",
-    "href": "scripts/instructor_workshop.html#compute-distances-between-cells",
-    "title": "Linear Algebra for Biologists",
-    "section": "Compute distances between cells",
-    "text": "Compute distances between cells\n\ncell_dist &lt;- dist(expr_subset, method = \"euclidean\")\ncell_dist_matrix &lt;- as.matrix(cell_dist)\n\ncell_dist_matrix[1:5, 1:5]\n\nInstructor explanation:\nEach value represents how far apart two cells are based on their gene expression vectors.\nInstructor pause:\nAsk:\n\nWhat does a distance of 0 mean?\nWhy is the diagonal 0?\nWhy is the matrix symmetric?"
-  },
-  {
-    "objectID": "scripts/instructor_workshop.html#hierarchical-clustering",
-    "href": "scripts/instructor_workshop.html#hierarchical-clustering",
-    "title": "Linear Algebra for Biologists",
-    "section": "Hierarchical clustering",
-    "text": "Hierarchical clustering\n\nhc &lt;- hclust(cell_dist)\n\nplot(hc, labels = FALSE, main = \"Hierarchical clustering of cells\")\n\nInstructor pause:\nAsk:\n\nWhat is being clustered?\nWhat information was used to cluster cells?\nDo we know yet whether these clusters are biologically meaningful?"
-  },
-  {
-    "objectID": "scripts/instructor_workshop.html#heatmap-of-cell-distances",
-    "href": "scripts/instructor_workshop.html#heatmap-of-cell-distances",
-    "title": "Linear Algebra for Biologists",
-    "section": "Heatmap of cell distances",
-    "text": "Heatmap of cell distances\n\nheatmap(\n  cell_dist_matrix,\n  Rowv = as.dendrogram(hc),\n  Colv = as.dendrogram(hc),\n  scale = \"none\",\n  labRow = FALSE,\n  labCol = FALSE,\n  main = \"Cell-cell distance matrix\"\n)\n\nInstructor note:\nThis is a good moment to connect:\n\nsimilarity\ndistance\nclustering\nvisual structure"
-  },
-  {
-    "objectID": "scripts/instructor_workshop.html#goal-1",
-    "href": "scripts/instructor_workshop.html#goal-1",
-    "title": "Linear Algebra for Biologists",
-    "section": "Goal",
-    "text": "Goal\nBy the end of this module, participants should understand:\n\ncentering\nscaling\nwhy preprocessing changes data geometry\nwhy transformations affect downstream analyses"
-  },
-  {
-    "objectID": "scripts/instructor_workshop.html#gene-means-and-variances",
-    "href": "scripts/instructor_workshop.html#gene-means-and-variances",
-    "title": "Linear Algebra for Biologists",
-    "section": "Gene means and variances",
-    "text": "Gene means and variances\n\ngene_summary &lt;- tibble(\n  gene = colnames(expr_var),\n  mean_expression = apply(expr_var, 2, mean),\n  variance = apply(expr_var, 2, var),\n  sd = apply(expr_var, 2, sd)\n)\n\nhead(gene_summary)\n\n\nggplot(gene_summary, aes(x = mean_expression, y = variance)) +\n  geom_point(alpha = 0.5, size = 1) +\n  labs(\n    title = \"Mean expression vs variance\",\n    x = \"Mean expression\",\n    y = \"Variance\"\n  )\n\nInstructor pause:\nAsk:\n\nDo all genes vary equally?\nWhy might highly variable genes dominate analyses?\nIs high variance always biological?"
-  },
-  {
-    "objectID": "scripts/instructor_workshop.html#center-data",
-    "href": "scripts/instructor_workshop.html#center-data",
-    "title": "Linear Algebra for Biologists",
-    "section": "Center data",
-    "text": "Center data\n\nexpr_centered &lt;- scale(expr_var, center = TRUE, scale = FALSE)\n\nCheck one gene before and after centering:\n\nexample_gene &lt;- colnames(expr_var)[1]\n\nmean(expr_var[, example_gene])\nmean(expr_centered[, example_gene])\n\nInstructor explanation:\nCentering shifts each gene so its mean is 0."
-  },
-  {
-    "objectID": "scripts/instructor_workshop.html#scale-data",
-    "href": "scripts/instructor_workshop.html#scale-data",
-    "title": "Linear Algebra for Biologists",
-    "section": "Scale data",
-    "text": "Scale data\n\nexpr_scaled &lt;- scale(expr_var, center = TRUE, scale = TRUE)\n\nCheck one gene before and after scaling:\n\nsd(expr_var[, example_gene])\nsd(expr_scaled[, example_gene])\n\nInstructor explanation:\nScaling makes each gene have standard deviation 1."
-  },
-  {
-    "objectID": "scripts/instructor_workshop.html#compare-raw-centered-and-scaled-values",
-    "href": "scripts/instructor_workshop.html#compare-raw-centered-and-scaled-values",
-    "title": "Linear Algebra for Biologists",
-    "section": "Compare raw, centered, and scaled values",
-    "text": "Compare raw, centered, and scaled values\n\ncompare_gene_df &lt;- tibble(\n  cell = rownames(expr_var),\n  raw = expr_var[, example_gene],\n  centered = expr_centered[, example_gene],\n  scaled = expr_scaled[, example_gene]\n) %&gt;%\n  pivot_longer(-cell, names_to = \"version\", values_to = \"value\")\n\nggplot(compare_gene_df, aes(x = value)) +\n  geom_histogram(bins = 40) +\n  facet_wrap(~ version, scales = \"free\") +\n  labs(\n    title = paste(\"Effect of centering and scaling on\", example_gene),\n    x = \"Value\",\n    y = \"Count\"\n  )\n\nInstructor pause:\nAsk:\n\nWhat changed after centering?\nWhat changed after scaling?\nDid the relative ordering of cells change for this gene?"
-  },
-  {
-    "objectID": "scripts/instructor_workshop.html#goal-2",
-    "href": "scripts/instructor_workshop.html#goal-2",
-    "title": "Linear Algebra for Biologists",
-    "section": "Goal",
-    "text": "Goal\nBy the end of this module, participants should understand:\n\nwhy high-dimensional data is hard to visualize\nPCA as a rotation of the data\nPCs as directions of variation\nvariance explained\nloadings as gene contributions"
-  },
-  {
-    "objectID": "scripts/instructor_workshop.html#run-pca-on-unscaled-data",
-    "href": "scripts/instructor_workshop.html#run-pca-on-unscaled-data",
-    "title": "Linear Algebra for Biologists",
-    "section": "Run PCA on unscaled data",
-    "text": "Run PCA on unscaled data\n\npca_unscaled &lt;- prcomp(expr_var, center = TRUE, scale. = FALSE)\n\n\npca_unscaled_df &lt;- as_tibble(pca_unscaled$x[, 1:2], rownames = \"cell\") %&gt;%\n  left_join(\n    pbmc@meta.data %&gt;% rownames_to_column(\"cell\"),\n    by = \"cell\"\n  )\n\n\nggplot(pca_unscaled_df, aes(x = PC1, y = PC2, color = seurat_annotations)) +\n  geom_point(size = 0.7, alpha = 0.7) +\n  labs(\n    title = \"PCA on centered, unscaled data\",\n    color = \"Cell type\"\n  )\n\nInstructor pause:\nAsk:\n\nWhat structure do we see?\nAre cell types separated?\nWhat might dominate this PCA?"
-  },
-  {
-    "objectID": "scripts/instructor_workshop.html#run-pca-on-scaled-data",
-    "href": "scripts/instructor_workshop.html#run-pca-on-scaled-data",
-    "title": "Linear Algebra for Biologists",
-    "section": "Run PCA on scaled data",
-    "text": "Run PCA on scaled data\n\npca_scaled &lt;- prcomp(expr_scaled, center = FALSE, scale. = FALSE)\n\n\npca_scaled_df &lt;- as_tibble(pca_scaled$x[, 1:2], rownames = \"cell\") %&gt;%\n  left_join(\n    pbmc@meta.data %&gt;% rownames_to_column(\"cell\"),\n    by = \"cell\"\n  )\n\n\nggplot(pca_scaled_df, aes(x = PC1, y = PC2, color = seurat_annotations)) +\n  geom_point(size = 0.7, alpha = 0.7) +\n  labs(\n    title = \"PCA on scaled data\",\n    color = \"Cell type\"\n  )\n\nInstructor pause:\nAsk:\n\nHow did scaling change the PCA?\nWhich version is easier to interpret?\nDoes scaling always make things better?"
-  },
-  {
-    "objectID": "scripts/instructor_workshop.html#compare-pca-with-and-without-labels",
-    "href": "scripts/instructor_workshop.html#compare-pca-with-and-without-labels",
-    "title": "Linear Algebra for Biologists",
-    "section": "Compare PCA with and without labels",
-    "text": "Compare PCA with and without labels\n\nggplot(pca_scaled_df, aes(x = PC1, y = PC2)) +\n  geom_point(size = 0.7, alpha = 0.7) +\n  labs(title = \"PCA without cell-type labels\")\n\n\nggplot(pca_scaled_df, aes(x = PC1, y = PC2, color = seurat_annotations)) +\n  geom_point(size = 0.7, alpha = 0.7) +\n  labs(\n    title = \"PCA with cell-type labels\",\n    color = \"Cell type\"\n  )\n\nInstructor note:\nThis is a good place to emphasize:\n\nDimensionality reduction does not know the labels.\nWe add labels afterward to interpret the structure."
-  },
-  {
-    "objectID": "scripts/instructor_workshop.html#variance-explained",
-    "href": "scripts/instructor_workshop.html#variance-explained",
-    "title": "Linear Algebra for Biologists",
-    "section": "Variance explained",
-    "text": "Variance explained\n\nvariance_explained &lt;- pca_scaled$sdev^2 / sum(pca_scaled$sdev^2)\n\nvariance_df &lt;- tibble(\n  PC = seq_along(variance_explained),\n  variance_explained = variance_explained\n)\n\nggplot(variance_df[1:30, ], aes(x = PC, y = variance_explained)) +\n  geom_col() +\n  labs(\n    title = \"Variance explained by principal components\",\n    x = \"Principal component\",\n    y = \"Proportion of variance explained\"\n  )\n\nInstructor pause:\nAsk:\n\nWhy does PC1 explain the most variance?\nWhy do later PCs explain less?\nHow many PCs would you keep?"
-  },
-  {
-    "objectID": "scripts/instructor_workshop.html#cumulative-variance-explained",
-    "href": "scripts/instructor_workshop.html#cumulative-variance-explained",
-    "title": "Linear Algebra for Biologists",
-    "section": "Cumulative variance explained",
-    "text": "Cumulative variance explained\n\nvariance_df &lt;- variance_df %&gt;%\n  mutate(cumulative_variance = cumsum(variance_explained))\n\nggplot(variance_df[1:50, ], aes(x = PC, y = cumulative_variance)) +\n  geom_line() +\n  geom_point() +\n  labs(\n    title = \"Cumulative variance explained\",\n    x = \"Number of PCs\",\n    y = \"Cumulative variance explained\"\n  )\n\nInstructor note:\nIn single-cell data, variance is often spread across many PCs.\nThis is normal and useful to discuss."
-  },
-  {
-    "objectID": "scripts/instructor_workshop.html#pca-loadings",
-    "href": "scripts/instructor_workshop.html#pca-loadings",
-    "title": "Linear Algebra for Biologists",
-    "section": "PCA loadings",
-    "text": "PCA loadings\n\nloadings_df &lt;- tibble(\n  gene = rownames(pca_scaled$rotation),\n  PC1 = pca_scaled$rotation[, 1],\n  PC2 = pca_scaled$rotation[, 2]\n)\n\nloadings_df %&gt;%\n  arrange(desc(abs(PC1))) %&gt;%\n  slice_head(n = 10)\n\n\nloadings_df %&gt;%\n  arrange(desc(abs(PC2))) %&gt;%\n  slice_head(n = 10)\n\nInstructor explanation:\nLoadings tell us which genes contribute strongly to a principal component.\nInstructor pause:\nAsk:\n\nIf a gene has a large loading on PC1, what does that mean?\nDoes PCA know which genes are biologically important?\nHow would we interpret these genes carefully?"
-  },
-  {
-    "objectID": "scripts/instructor_workshop.html#goal-3",
-    "href": "scripts/instructor_workshop.html#goal-3",
-    "title": "Linear Algebra for Biologists",
-    "section": "Goal",
-    "text": "Goal\nBy the end of this module, participants should understand:\n\nPCA, UMAP, and t-SNE are all dimensionality reduction methods\nPCA emphasizes global linear structure\nUMAP and t-SNE emphasize local neighborhood structure\nvisualizations are tools, not proof"
-  },
-  {
-    "objectID": "scripts/instructor_workshop.html#use-pcs-as-input",
-    "href": "scripts/instructor_workshop.html#use-pcs-as-input",
-    "title": "Linear Algebra for Biologists",
-    "section": "Use PCs as input",
-    "text": "Use PCs as input\nInstructor note:\nFor UMAP and t-SNE, we usually do not use all genes directly.\nWe use top PCs as a lower-dimensional representation of the data.\n\npca_coords &lt;- pca_scaled$x[, 1:20]\ndim(pca_coords)"
-  },
-  {
-    "objectID": "scripts/instructor_workshop.html#run-umap",
-    "href": "scripts/instructor_workshop.html#run-umap",
-    "title": "Linear Algebra for Biologists",
-    "section": "Run UMAP",
-    "text": "Run UMAP\n\numap_coords &lt;- umap(\n  pca_coords,\n  n_neighbors = 15,\n  min_dist = 0.3,\n  metric = \"euclidean\"\n)\n\n\numap_df &lt;- as_tibble(umap_coords, .name_repair = \"unique\") %&gt;%\n  rename(UMAP1 = ...1, UMAP2 = ...2) %&gt;%\n  mutate(cell = rownames(pca_coords)) %&gt;%\n  left_join(\n    pbmc@meta.data %&gt;% rownames_to_column(\"cell\"),\n    by = \"cell\"\n  )\n\n\nggplot(umap_df, aes(x = UMAP1, y = UMAP2, color = seurat_annotations)) +\n  geom_point(size = 0.7, alpha = 0.7) +\n  labs(\n    title = \"UMAP of PBMC3k\",\n    color = \"Cell type\"\n  )\n\nInstructor pause:\nAsk:\n\nWhat looks different from PCA?\nAre clusters more separated?\nDoes more separation mean more truth?"
-  },
-  {
-    "objectID": "scripts/instructor_workshop.html#run-t-sne",
-    "href": "scripts/instructor_workshop.html#run-t-sne",
-    "title": "Linear Algebra for Biologists",
-    "section": "Run t-SNE",
-    "text": "Run t-SNE\nInstructor note:\nThis may take a little longer. Pre-run if needed.\n\ntsne_coords &lt;- Rtsne(\n  pca_coords,\n  dims = 2,\n  perplexity = 30,\n  verbose = FALSE\n)$Y\n\n\ntsne_df &lt;- as_tibble(tsne_coords, .name_repair = \"unique\") %&gt;%\n  rename(tSNE1 = ...1, tSNE2 = ...2) %&gt;%\n  mutate(cell = rownames(pca_coords)) %&gt;%\n  left_join(\n    pbmc@meta.data %&gt;% rownames_to_column(\"cell\"),\n    by = \"cell\"\n  )\n\n\nggplot(tsne_df, aes(x = tSNE1, y = tSNE2, color = seurat_annotations)) +\n  geom_point(size = 0.7, alpha = 0.7) +\n  labs(\n    title = \"t-SNE of PBMC3k\",\n    color = \"Cell type\"\n  )"
-  },
-  {
-    "objectID": "scripts/instructor_workshop.html#compare-pca-umap-and-t-sne",
-    "href": "scripts/instructor_workshop.html#compare-pca-umap-and-t-sne",
-    "title": "Linear Algebra for Biologists",
-    "section": "Compare PCA, UMAP, and t-SNE",
-    "text": "Compare PCA, UMAP, and t-SNE\n\np_pca &lt;- ggplot(pca_scaled_df, aes(x = PC1, y = PC2, color = seurat_annotations)) +\n  geom_point(size = 0.5, alpha = 0.7) +\n  labs(title = \"PCA\", color = \"Cell type\") +\n  theme(legend.position = \"none\")\n\np_umap &lt;- ggplot(umap_df, aes(x = UMAP1, y = UMAP2, color = seurat_annotations)) +\n  geom_point(size = 0.5, alpha = 0.7) +\n  labs(title = \"UMAP\", color = \"Cell type\") +\n  theme(legend.position = \"none\")\n\np_tsne &lt;- ggplot(tsne_df, aes(x = tSNE1, y = tSNE2, color = seurat_annotations)) +\n  geom_point(size = 0.5, alpha = 0.7) +\n  labs(title = \"t-SNE\", color = \"Cell type\")\n\np_pca + p_umap + p_tsne\n\nInstructor pause:\nAsk:\n\nWhich method separates clusters most clearly?\nWhich method is easiest to overinterpret?\nWhich method preserves global structure best?\nAre distances between clusters meaningful in all plots?"
-  },
-  {
-    "objectID": "scripts/instructor_workshop.html#goal-4",
-    "href": "scripts/instructor_workshop.html#goal-4",
-    "title": "Linear Algebra for Biologists",
-    "section": "Goal",
-    "text": "Goal\nBy the end of this module, participants should understand:\n\nanalysis choices affect visual output\ndifferent parameter choices can change interpretation\nplots should be interpreted critically"
-  },
-  {
-    "objectID": "scripts/instructor_workshop.html#try-fewer-variable-genes",
-    "href": "scripts/instructor_workshop.html#try-fewer-variable-genes",
-    "title": "Linear Algebra for Biologists",
-    "section": "Try fewer variable genes",
-    "text": "Try fewer variable genes\n\nvariable_genes_200 &lt;- VariableFeatures(pbmc)[1:200]\nexpr_200 &lt;- expr_t[, variable_genes_200]\nexpr_200_scaled &lt;- scale(expr_200, center = TRUE, scale = TRUE)\n\npca_200 &lt;- prcomp(expr_200_scaled, center = FALSE, scale. = FALSE)\npca_200_df &lt;- as_tibble(pca_200$x[, 1:2], rownames = \"cell\") %&gt;%\n  left_join(\n    pbmc@meta.data %&gt;% rownames_to_column(\"cell\"),\n    by = \"cell\"\n  )\n\n\nggplot(pca_200_df, aes(x = PC1, y = PC2, color = seurat_annotations)) +\n  geom_point(size = 0.7, alpha = 0.7) +\n  labs(\n    title = \"PCA using top 200 variable genes\",\n    color = \"Cell type\"\n  )"
-  },
-  {
-    "objectID": "scripts/instructor_workshop.html#try-more-variable-genes",
-    "href": "scripts/instructor_workshop.html#try-more-variable-genes",
-    "title": "Linear Algebra for Biologists",
-    "section": "Try more variable genes",
-    "text": "Try more variable genes\n\nvariable_genes_2000 &lt;- VariableFeatures(pbmc)[1:2000]\nexpr_2000 &lt;- expr_t[, variable_genes_2000]\nexpr_2000_scaled &lt;- scale(expr_2000, center = TRUE, scale = TRUE)\n\npca_2000 &lt;- prcomp(expr_2000_scaled, center = FALSE, scale. = FALSE)\npca_2000_df &lt;- as_tibble(pca_2000$x[, 1:2], rownames = \"cell\") %&gt;%\n  left_join(\n    pbmc@meta.data %&gt;% rownames_to_column(\"cell\"),\n    by = \"cell\"\n  )\n\n\nggplot(pca_2000_df, aes(x = PC1, y = PC2, color = seurat_annotations)) +\n  geom_point(size = 0.7, alpha = 0.7) +\n  labs(\n    title = \"PCA using top 2000 variable genes\",\n    color = \"Cell type\"\n  )\n\nInstructor pause:\nAsk:\n\nDid the plot change?\nWhy would gene selection affect PCA?\nWhich version would you trust more, and why?"
-  },
-  {
-    "objectID": "scripts/instructor_workshop.html#umap-with-different-number-of-pcs",
-    "href": "scripts/instructor_workshop.html#umap-with-different-number-of-pcs",
-    "title": "Linear Algebra for Biologists",
-    "section": "UMAP with different number of PCs",
-    "text": "UMAP with different number of PCs\n\numap_5pcs &lt;- umap(pca_scaled$x[, 1:5])\numap_50pcs &lt;- umap(pca_scaled$x[, 1:50])\n\n\numap_5_df &lt;- as_tibble(umap_5pcs, .name_repair = \"unique\") %&gt;%\n  rename(UMAP1 = ...1, UMAP2 = ...2) %&gt;%\n  mutate(cell = rownames(pca_scaled$x)) %&gt;%\n  left_join(\n    pbmc@meta.data %&gt;% rownames_to_column(\"cell\"),\n    by = \"cell\"\n  )\n\numap_50_df &lt;- as_tibble(umap_50pcs, .name_repair = \"unique\") %&gt;%\n  rename(UMAP1 = ...1, UMAP2 = ...2) %&gt;%\n  mutate(cell = rownames(pca_scaled$x)) %&gt;%\n  left_join(\n    pbmc@meta.data %&gt;% rownames_to_column(\"cell\"),\n    by = \"cell\"\n  )\n\n\np_umap_5 &lt;- ggplot(umap_5_df, aes(x = UMAP1, y = UMAP2, color = seurat_annotations)) +\n  geom_point(size = 0.5, alpha = 0.7) +\n  labs(title = \"UMAP using 5 PCs\") +\n  theme(legend.position = \"none\")\n\np_umap_20 &lt;- ggplot(umap_df, aes(x = UMAP1, y = UMAP2, color = seurat_annotations)) +\n  geom_point(size = 0.5, alpha = 0.7) +\n  labs(title = \"UMAP using 20 PCs\") +\n  theme(legend.position = \"none\")\n\np_umap_50 &lt;- ggplot(umap_50_df, aes(x = UMAP1, y = UMAP2, color = seurat_annotations)) +\n  geom_point(size = 0.5, alpha = 0.7) +\n  labs(title = \"UMAP using 50 PCs\")\n\np_umap_5 + p_umap_20 + p_umap_50\n\nInstructor pause:\nAsk:\n\nHow much did the UMAP change?\nWhat does this tell us about parameter choices?\nWhy should we report preprocessing choices?"
-  },
-  {
-    "objectID": "scripts/instructor_workshop.html#goal-5",
-    "href": "scripts/instructor_workshop.html#goal-5",
-    "title": "Linear Algebra for Biologists",
-    "section": "Goal",
-    "text": "Goal\nBy the end of this module, participants should be able to critically evaluate dimensionality reduction plots."
-  },
-  {
-    "objectID": "scripts/instructor_workshop.html#hide-labels-first",
-    "href": "scripts/instructor_workshop.html#hide-labels-first",
-    "title": "Linear Algebra for Biologists",
-    "section": "Hide labels first",
-    "text": "Hide labels first\n\nggplot(umap_df, aes(x = UMAP1, y = UMAP2)) +\n  geom_point(size = 0.7, alpha = 0.7) +\n  labs(title = \"UMAP without labels\")\n\nInstructor activity:\nAsk participants:\n\nHow many groups do you see?\nAre all groups equally separated?\nDo any cells appear intermediate?\nWhat would you want to know before interpreting this?"
-  },
-  {
-    "objectID": "scripts/instructor_workshop.html#reveal-labels",
-    "href": "scripts/instructor_workshop.html#reveal-labels",
-    "title": "Linear Algebra for Biologists",
-    "section": "Reveal labels",
-    "text": "Reveal labels\n\nggplot(umap_df, aes(x = UMAP1, y = UMAP2, color = seurat_annotations)) +\n  geom_point(size = 0.7, alpha = 0.7) +\n  labs(\n    title = \"UMAP with cell-type annotations\",\n    color = \"Cell type\"\n  )\n\nInstructor pause:\nAsk:\n\nDid the labels match expectations?\nAre any cell types mixed?\nDoes overlap mean the labels are wrong?\nDoes separation mean the biology is simple?"
-  },
-  {
-    "objectID": "scripts/instructor_workshop.html#color-by-technical-metrics",
-    "href": "scripts/instructor_workshop.html#color-by-technical-metrics",
-    "title": "Linear Algebra for Biologists",
-    "section": "Color by technical metrics",
-    "text": "Color by technical metrics\n\nggplot(umap_df, aes(x = UMAP1, y = UMAP2, color = nFeature_RNA)) +\n  geom_point(size = 0.7, alpha = 0.7) +\n  labs(\n    title = \"UMAP colored by number of detected genes\",\n    color = \"nFeature_RNA\"\n  )\n\n\nggplot(umap_df, aes(x = UMAP1, y = UMAP2, color = percent.mt)) +\n  geom_point(size = 0.7, alpha = 0.7) +\n  labs(\n    title = \"UMAP colored by mitochondrial percentage\",\n    color = \"percent.mt\"\n  )\n\nInstructor note:\nThis is the “be careful” moment.\nEmphasize:\n\nA plot can reflect biology, technical variation, or both."
-  },
-  {
-    "objectID": "scripts/instructor_workshop.html#core-questions-for-interpreting-any-dimensionality-reduction-plot",
-    "href": "scripts/instructor_workshop.html#core-questions-for-interpreting-any-dimensionality-reduction-plot",
-    "title": "Linear Algebra for Biologists",
-    "section": "Core questions for interpreting any dimensionality reduction plot",
-    "text": "Core questions for interpreting any dimensionality reduction plot\nAsk:\n\nWhat are the observations?\nWhat are the features?\nWhat preprocessing was done?\nWhat distance or similarity concept is implied?\nWhat method was used?\nWhat does the method preserve?\nWhat labels or metadata were added after the fact?\nCould technical factors explain the structure?\nWhat follow-up analysis would you need?"
-  },
-  {
-    "objectID": "scripts/instructor_workshop.html#student-task",
-    "href": "scripts/instructor_workshop.html#student-task",
-    "title": "Linear Algebra for Biologists",
-    "section": "Student task",
-    "text": "Student task\nUse the same PBMC3k dataset and answer:\n\nWhat happens if you use 500 variable genes instead of 1000?\nWhat happens if you run UMAP using 10 PCs instead of 20?\nWhich plot gives the clearest cell-type separation?\nWhich plot would you be most cautious about interpreting?\nWhat preprocessing choice had the biggest visible effect?"
-  },
-  {
-    "objectID": "scripts/instructor_workshop.html#starter-code",
-    "href": "scripts/instructor_workshop.html#starter-code",
-    "title": "Linear Algebra for Biologists",
-    "section": "Starter code",
-    "text": "Starter code\n\n# Choose number of variable genes\nn_genes &lt;- 500\n\ngenes_use &lt;- VariableFeatures(pbmc)[1:n_genes]\n\nexpr_use &lt;- expr_t[, genes_use]\nexpr_use_scaled &lt;- scale(expr_use, center = TRUE, scale = TRUE)\n\npca_use &lt;- prcomp(expr_use_scaled, center = FALSE, scale. = FALSE)\n\npca_use_df &lt;- as_tibble(pca_use$x[, 1:2], rownames = \"cell\") %&gt;%\n  left_join(\n    pbmc@meta.data %&gt;% rownames_to_column(\"cell\"),\n    by = \"cell\"\n  )\n\nggplot(pca_use_df, aes(x = PC1, y = PC2, color = seurat_annotations)) +\n  geom_point(size = 0.7, alpha = 0.7)\n\n\n# Choose number of PCs\nn_pcs &lt;- 10\n\numap_use &lt;- umap(pca_use$x[, 1:n_pcs])\n\numap_use_df &lt;- as_tibble(umap_use, .name_repair = \"unique\") %&gt;%\n  rename(UMAP1 = ...1, UMAP2 = ...2) %&gt;%\n  mutate(cell = rownames(pca_use$x)) %&gt;%\n  left_join(\n    pbmc@meta.data %&gt;% rownames_to_column(\"cell\"),\n    by = \"cell\"\n  )\n\nggplot(umap_use_df, aes(x = UMAP1, y = UMAP2, color = seurat_annotations)) +\n  geom_point(size = 0.7, alpha = 0.7)"
+    "objectID": "scripts/linear_algebra_participant.html#demo-10-parameters-matter",
+    "href": "scripts/linear_algebra_participant.html#demo-10-parameters-matter",
+    "title": "Linear Algebra for Biologists Workshop",
+    "section": "Demo 10: Parameters matter",
+    "text": "Demo 10: Parameters matter\n\nrun_umap &lt;- function(nn){\n  set.seed(42)\n  umap(pbmc_pca_scores, \n       n_neighbors = nn, \n       min_dist = 0.3,\n       n_components = 2, \n       verbose = FALSE)\n}\n\np1 &lt;- plot_embed(run_umap(5)[,1], run_umap(5)[,2], \"n_neighbors = 5\", \"UMAP1\", \"UMAP2\")\np2 &lt;- plot_embed(run_umap(15)[,1], run_umap(15)[,2], \"n_neighbors = 15\", \"UMAP1\", \"UMAP2\")\np3 &lt;- plot_embed(run_umap(30)[,1], run_umap(30)[,2], \"n_neighbors = 30\", \"UMAP1\", \"UMAP2\", show_legend = TRUE)\n\n(p1 | p2 | p3)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDiscussion\n\n\n\n\nThe clusters look most dramatically separated in n_neighbors = 5. Does that mean it’s the best parameter choice?\nIn n_neighbors = 30, Clusters 0 and 2 have merged into a diagonal. What does that tell you about what happens when neighborhoods get too large?\nIf you saw only the n_neighbors = 5 plot in a paper, what would you conclude about the number of cell populations? Would that conclusion hold across all three plots?"
   }
 ]

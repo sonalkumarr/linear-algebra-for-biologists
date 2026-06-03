@@ -2,23 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://sonalkumarr.github.io/linear-algebra-for-biologists/setup.html</loc>
-    <lastmod>2026-04-29T07:17:15.220Z</lastmod>
+    <lastmod>2026-06-03T05:53:16.173Z</lastmod>
   </url>
   <url>
-    <loc>https://sonalkumarr.github.io/linear-algebra-for-biologists/modules/module5.html</loc>
-    <lastmod>2026-04-29T03:17:18.999Z</lastmod>
-  </url>
-  <url>
-    <loc>https://sonalkumarr.github.io/linear-algebra-for-biologists/modules/module3.html</loc>
-    <lastmod>2026-04-29T03:15:28.507Z</lastmod>
-  </url>
-  <url>
-    <loc>https://sonalkumarr.github.io/linear-algebra-for-biologists/modules/module1.html</loc>
-    <lastmod>2026-04-29T03:11:00.790Z</lastmod>
+    <loc>https://sonalkumarr.github.io/linear-algebra-for-biologists/modules/workshop_materials.html</loc>
+    <lastmod>2026-06-03T05:58:26.077Z</lastmod>
   </url>
   <url>
     <loc>https://sonalkumarr.github.io/linear-algebra-for-biologists/instructor_info.html</loc>
-    <lastmod>2026-04-29T03:23:03.498Z</lastmod>
+    <lastmod>2026-06-03T06:00:03.271Z</lastmod>
   </url>
   <url>
     <loc>https://sonalkumarr.github.io/linear-algebra-for-biologists/about.html</loc>
@@ -26,22 +18,14 @@
   </url>
   <url>
     <loc>https://sonalkumarr.github.io/linear-algebra-for-biologists/index.html</loc>
-    <lastmod>2026-04-29T02:18:38.091Z</lastmod>
+    <lastmod>2026-06-03T05:59:37.484Z</lastmod>
   </url>
   <url>
     <loc>https://sonalkumarr.github.io/linear-algebra-for-biologists/modules/homework.html</loc>
     <lastmod>2026-04-29T03:12:03.989Z</lastmod>
   </url>
   <url>
-    <loc>https://sonalkumarr.github.io/linear-algebra-for-biologists/modules/module2.html</loc>
-    <lastmod>2026-04-29T03:15:04.348Z</lastmod>
-  </url>
-  <url>
-    <loc>https://sonalkumarr.github.io/linear-algebra-for-biologists/modules/module4.html</loc>
-    <lastmod>2026-04-29T03:14:03.912Z</lastmod>
-  </url>
-  <url>
-    <loc>https://sonalkumarr.github.io/linear-algebra-for-biologists/scripts/instructor_workshop.html</loc>
-    <lastmod>2026-04-29T01:57:54.861Z</lastmod>
+    <loc>https://sonalkumarr.github.io/linear-algebra-for-biologists/scripts/linear_algebra_participant.html</loc>
+    <lastmod>2026-06-03T05:33:28.535Z</lastmod>
   </url>
 </urlset>

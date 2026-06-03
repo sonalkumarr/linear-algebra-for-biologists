@@ -136,24 +136,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-modules">    
         <li>
-    <a class="dropdown-item" href="./modules/module1.html">
- <span class="dropdown-text">Module 1: Biological data structure</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="./modules/module2.html">
- <span class="dropdown-text">Module 2: Data transformations</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="./modules/module3.html">
- <span class="dropdown-text">Module 3: Dimensionality reduction</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="./modules/module4.html">
- <span class="dropdown-text">Module 4: Beyond the PCA</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="./modules/module5.html">
- <span class="dropdown-text">Module 5: Interpretation in practice</span></a>
+    <a class="dropdown-item" href="./modules/workshop_materials.html">
+ <span class="dropdown-text">Workshop slides</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./modules/homework.html">
@@ -163,7 +147,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
   <li class="nav-item">
     <a class="nav-link" href="./instructor_info.html"> 
-<span class="menu-text">Instructor</span></a>
+<span class="menu-text">Contact</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -234,36 +218,47 @@ Important
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"tidyverse"</span>,</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"factoextra"</span>,</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Rtsne"</span>,</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"uwot"</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"uwot"</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"patchwork"</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Seurat"</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>If <code>Seurat</code> doesn’t install correctly, you can install it through BioConductor as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">"BiocManager"</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">"Seurat"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>That should do the trick!</p>
 <ol start="3" type="1">
 <li>To make sure the packages installed correctly, go ahead and try loading them in by running the following in the console:</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(factoextra)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Rtsne)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(uwot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(factoextra)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Rtsne)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(uwot)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Seurat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="data" class="level2">
 <h2 class="anchored" data-anchor-id="data">2. Data</h2>
 <p>We will be using the same dataset throughout the course. The original study sequenced 2,700 peripheral blood mononuclear cells (PBMCs) from a healthy donor, which is freely available as the <a href="https://www.10xgenomics.com/datasets/3-k-pbm-cs-from-a-healthy-donor-1-standard-1-1-0">PBMC3k dataset from 10X Genomics</a>.</p>
-<p>We have generated a subset of this dataset for demonstration in this workshop. Briefly, we did xyz to the data. As the focus of the course is not on analyzing single cell RNASeq in R using Seurat, we’ve tried to retain a high-dimensional dataset that can still be analyzed easily locally on personal computers. More details on data preprocessing are given in this <a href="./scripts/data_preprocessing.qmd" download="">script</a>.</p>
-<p>Clicking on <a href="./data/pbmc3k_subset.rds">this link</a> should start the download of the <code>.rds</code> file. This is a file type that allows reading in R objects directly, and are often better for reproducibility. Once downloaded, you can load your data in the workspace like so:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#load file in your workspace.</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"pbmc3k_subset.rds"</span>) <span class="co">#remember to confirm the path to your file.</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#data is a list of many files, and individual files can be accessed like so:</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>pbmc3k <span class="ot">&lt;-</span> data<span class="sc">$</span>readcounts</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>metadata <span class="ot">&lt;-</span> data<span class="sc">$</span>metadata</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<p>A light-weight subset of this dataset is available as <code>pbmc_small</code>, which contains expression data for 200+ genes measured for 80 cells. utilizing a subset of the data helps ensure that all code can be easily and quickly run on most participants’ systems locally.</p>
+<p>You do not need to download this dataset ahead of class, as it can be accessed after loading the <code>Seurat</code> package in our session.</p>
 </section>
 <section id="code" class="level2">
 <h2 class="anchored" data-anchor-id="code">3. Code</h2>
-<p>While individual course modules will be populated with relevant code that can be followed to reproduce results, it is recommended to download and work on this <a href="./scripts/participant_workshop.qmd" download="">Quarto document for course participants</a>. You will be using it throughout the workshop, and you can run through it line by line with the instructor and make any notes, if needed.</p>
+<p>A Quarto document has been prepared and is available for participants to follow along with the workshop. It is recommended to download and work on this file. You will be using it throughout the workshop, and you can run through it line by line with the instructor and make any notes as needed.</p>
+<p>To download it, click on this link to the <a href="https://github.com/sonalkumarr/linear-algebra-for-biologists/blob/main/scripts/linear_algebra_participant.qmd">participant notebook</a>.</p>
+<p>This will take you to the script on GitHub, you can download it by clicking the icon corresponding to ‘Download raw file’, as shown below:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="data/download.png" class="img-fluid figure-img"></p>
+<figcaption>Download icon for the script on GitHub</figcaption>
+</figure>
+</div>
 <p>This is all that you need to get started!</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
